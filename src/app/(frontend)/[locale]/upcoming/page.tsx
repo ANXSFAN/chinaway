@@ -62,7 +62,7 @@ export default async function UpcomingPage({ params }: { params: Promise<{ local
       <section className="py-16 px-[6%]">
         <div className="max-w-[1200px] mx-auto space-y-8">
           {upcomingTours.map((tour: any) => {
-            const imgSrc = tour.coverImage?.url || tour.imageUrl || '/placeholder.jpg'
+            const imgSrc = tour.imageUrl || tour.coverImage?.url || '/placeholder.jpg'
             const priceDisplay = tour.price ? tour.price.toLocaleString('de-DE') : '0'
             const depositAmount = tour.depositAmount || 100
 

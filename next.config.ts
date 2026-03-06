@@ -19,6 +19,18 @@ const nextConfig: NextConfig = {
         protocol: 'http',
         hostname: 'localhost',
       },
+      {
+        protocol: 'https',
+        hostname: '*.vercel.app',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.chinaway.es',
+      },
+      {
+        protocol: 'https',
+        hostname: 'chinaway.es',
+      },
     ],
   },
 }

@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   })
   const post = docs[0] as any
   if (!post) return {}
-  const imgSrc = post.coverImage?.url || post.imageUrl || ''
+  const imgSrc = post.imageUrl || post.coverImage?.url || ''
   return {
     title: post.title,
     description: post.excerpt || '',
@@ -69,7 +69,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ loc
   const post = docs[0] as any
   if (!post) notFound()
 
-  const imgSrc = post.coverImage?.url || post.imageUrl || '/placeholder.jpg'
+  const imgSrc = post.imageUrl || post.coverImage?.url || '/placeholder.jpg'
   const catLabel = post.category && categoryLabels[post.category]
     ? categoryLabels[post.category][locale] || post.category
     : ''
@@ -166,7 +166,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ loc
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {relatedPosts.map((rp: any) => {
-                const rpImg = rp.coverImage?.url || rp.imageUrl || '/placeholder.jpg'
+                const rpImg = rp.imageUrl || rp.coverImage?.url || '/placeholder.jpg'
                 const rpCat = rp.category && categoryLabels[rp.category]
                   ? categoryLabels[rp.category][locale] || rp.category
                   : ''

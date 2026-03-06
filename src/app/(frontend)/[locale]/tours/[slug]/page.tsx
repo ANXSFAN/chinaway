@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   })
   const tour = docs[0] as any
   if (!tour) return {}
-  const imgSrc = tour.coverImage?.url || tour.imageUrl || ''
+  const imgSrc = tour.imageUrl || tour.coverImage?.url || ''
   return {
     title: tour.title,
     description: `${tour.days} ${locale === 'zh' ? '天' : locale === 'en' ? 'days' : 'días'} · ${tour.cities || ''}`,
@@ -53,7 +53,7 @@ export default async function TourDetailPage({ params }: { params: Promise<{ loc
   const tour = docs[0] as any
   if (!tour) notFound()
 
-  const imgSrc = tour.coverImage?.url || tour.imageUrl || '/placeholder.jpg'
+  const imgSrc = tour.imageUrl || tour.coverImage?.url || '/placeholder.jpg'
   const priceDisplay = tour.price ? tour.price.toLocaleString('de-DE') : '0'
   const depositAmount = tour.depositAmount || 100
   const itinerary = (tour.itinerary || []) as any[]

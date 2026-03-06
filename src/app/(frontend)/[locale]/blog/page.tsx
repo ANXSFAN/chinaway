@@ -66,7 +66,7 @@ export default async function BlogPage({ params }: { params: Promise<{ locale: s
       <section className="py-16 px-[6%]">
         <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {posts.map((post: any) => {
-            const imgSrc = post.coverImage?.url || post.imageUrl || '/placeholder.jpg'
+            const imgSrc = post.imageUrl || post.coverImage?.url || '/placeholder.jpg'
             const catLabel = post.category && categoryLabels[post.category]
               ? categoryLabels[post.category][locale] || post.category
               : ''

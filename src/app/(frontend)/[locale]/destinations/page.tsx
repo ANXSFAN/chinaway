@@ -44,7 +44,7 @@ export default async function DestinationsPage({ params }: { params: Promise<{ l
       <section className="py-16 px-[6%]">
         <div className="max-w-[1200px] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {destinations.map((d: any) => {
-            const imgSrc = d.coverImage?.url || d.imageUrl || '/placeholder.jpg'
+            const imgSrc = d.imageUrl || d.coverImage?.url || '/placeholder.jpg'
             const themeLabel = d.theme ? d.theme.charAt(0).toUpperCase() + d.theme.slice(1) : ''
             return (
               <Link

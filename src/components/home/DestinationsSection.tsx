@@ -43,7 +43,7 @@ export function DestinationsSection({ destinations }: Props) {
         <div className="grid grid-cols-1 md:grid-cols-3 auto-rows-[240px] gap-3">
           {destinations.map((d, i) => {
             const isWide = i === 0 || i === destinations.length - 1
-            const imgSrc = d.coverImage?.url || d.imageUrl || '/placeholder.jpg'
+            const imgSrc = d.imageUrl || d.coverImage?.url || '/placeholder.jpg'
             const themeLabel = d.theme ? d.theme.charAt(0).toUpperCase() + d.theme.slice(1) : ''
 
             return (

@@ -64,10 +64,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     years: siteSettings.stats?.years || '8',
   }
 
-  // Hero image
+  // Hero image: prefer external URL, fall back to upload
   const heroImageUrl =
-    (homePage.hero?.image as { url?: string } | null)?.url ||
     homePage.hero?.imageUrl ||
+    (homePage.hero?.image as { url?: string } | null)?.url ||
     'https://picsum.photos/id/1015/1800/900'
 
   // Marquee cities
@@ -84,8 +84,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   // Banner
   const banner = {
     imageUrl:
-      (homePage.banner?.image as { url?: string } | null)?.url ||
       homePage.banner?.imageUrl ||
+      (homePage.banner?.image as { url?: string } | null)?.url ||
       'https://picsum.photos/id/1022/1800/900',
     location: homePage.banner?.location || 'Zhangjiajie · 张家界',
     quote: homePage.banner?.quote || 'Las montañas que inspiraron Avatar',

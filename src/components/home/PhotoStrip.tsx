@@ -26,7 +26,7 @@ export function PhotoStrip({ photos }: Props) {
       </div>
       <div className="flex gap-3 overflow-x-auto scroll-hide pb-1">
         {photos.map((photo, i) => {
-          const src = photo.image?.url || photo.imageUrl || '/placeholder.jpg'
+          const src = photo.imageUrl || photo.image?.url || '/placeholder.jpg'
           return (
             <Image
               key={i}

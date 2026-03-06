@@ -45,7 +45,7 @@ export function ExpressSection({ deals }: Props) {
 
         <div className="flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory scroll-hide">
           {deals.map((deal) => {
-            const imgSrc = deal.coverImage?.url || deal.imageUrl || '/placeholder.jpg'
+            const imgSrc = deal.imageUrl || deal.coverImage?.url || '/placeholder.jpg'
             const spotsLeft = deal.departures?.[0]
               ? deal.departures[0].spotsTotal - deal.departures[0].spotsBooked
               : 0

@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   })
   const dest = docs[0] as any
   if (!dest) return {}
-  const imgSrc = dest.coverImage?.url || dest.imageUrl || ''
+  const imgSrc = dest.imageUrl || dest.coverImage?.url || ''
   return {
     title: dest.name,
     description: dest.shortDescription || '',
@@ -51,7 +51,7 @@ export default async function DestinationDetailPage({ params }: { params: Promis
     limit: 5,
   })
 
-  const imgSrc = dest.coverImage?.url || dest.imageUrl || '/placeholder.jpg'
+  const imgSrc = dest.imageUrl || dest.coverImage?.url || '/placeholder.jpg'
   const themeLabel = dest.theme ? String(dest.theme).charAt(0).toUpperCase() + String(dest.theme).slice(1) : ''
   const gallery = (dest.gallery || []) as any[]
 
@@ -112,7 +112,7 @@ export default async function DestinationDetailPage({ params }: { params: Promis
               <p className="font-dm text-sm text-gray">{t('destinationDetail.comingSoon')}</p>
             )}
             {relatedTours.map((tour: any) => {
-              const tourImg = tour.coverImage?.url || tour.imageUrl || '/placeholder.jpg'
+              const tourImg = tour.imageUrl || tour.coverImage?.url || '/placeholder.jpg'
               const priceDisplay = tour.price ? tour.price.toLocaleString('de-DE') : '0'
               return (
                 <Link key={tour.id} href={`/tours/${tour.slug}`} className="block mb-4 group">

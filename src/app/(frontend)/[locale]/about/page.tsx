@@ -107,16 +107,16 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
     payload.findGlobal({ slug: 'site-settings' }),
   ])
 
-  // Hero image: prefer upload, fall back to URL field, then default
+  // Hero image: prefer external URL, fall back to upload
   const heroImageUrl =
-    (aboutPage.heroImage as { url?: string } | null)?.url ||
     aboutPage.heroImageUrl ||
+    (aboutPage.heroImage as { url?: string } | null)?.url ||
     'https://picsum.photos/id/1029/1800/900'
 
   // Story image
   const storyImageUrl =
-    (aboutPage.storyImage as { url?: string } | null)?.url ||
     aboutPage.storyImageUrl ||
+    (aboutPage.storyImage as { url?: string } | null)?.url ||
     'https://picsum.photos/id/1036/800/1000'
 
   // Story paragraphs from CMS (localized fields returned as direct values)

@@ -46,7 +46,7 @@ export default async function ToursPage({ params }: { params: Promise<{ locale: 
       <section className="py-16 px-[6%]">
         <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {tours.map((tour: any) => {
-            const imgSrc = tour.coverImage?.url || tour.imageUrl || '/placeholder.jpg'
+            const imgSrc = tour.imageUrl || tour.coverImage?.url || '/placeholder.jpg'
             const priceDisplay = tour.price ? tour.price.toLocaleString('de-DE') : '0'
             return (
               <Link
