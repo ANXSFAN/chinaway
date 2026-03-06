@@ -1,0 +1,39 @@
+{
+  "name": "chinaway",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
+    "generate:types": "payload generate:types",
+    "generate:importmap": "payload generate:importmap"
+  },
+  "dependencies": {
+    "@payloadcms/db-postgres": "^3.79.0",
+    "@payloadcms/next": "^3.79.0",
+    "@payloadcms/richtext-lexical": "^3.79.0",
+    "cross-env": "^7.0.3",
+    "graphql": "^16.10.0",
+    "leaflet": "^1.9.4",
+    "next": "15.4.11",
+    "next-intl": "^4.1.0",
+    "payload": "^3.79.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-leaflet": "^5.0.0",
+    "sharp": "^0.33.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.0",
+    "@types/leaflet": "^1.9.21",
+    "@types/node": "^22.13.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "tailwindcss": "^4.1.0",
+    "typescript": "^5.8.0"
+  }
+}

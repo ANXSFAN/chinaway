@@ -1,0 +1,79 @@
+{
+  "nav": {
+    "destinations": "目的地",
+    "tours": "行程",
+    "customize": "定制游",
+    "about": "关于我们",
+    "contact": "联系",
+    "tagline": "从欧洲出发"
+  },
+  "hero": {
+    "eyebrow": "从欧洲出发，探索中国",
+    "title1": "发现",
+    "title2": "真实的",
+    "title3": "中国",
+    "subtitle": "专为旅欧人士打造的深度游，双语导游、签证协助，带您体验不一样的中国。",
+    "cta": "查看行程",
+    "cta2": "免费咨询"
+  },
+  "stats": {
+    "travelers": "旅行者",
+    "destinations": "目的地",
+    "years": "年经验"
+  },
+  "destinations": {
+    "label": "目的地",
+    "title": "我们带您去哪里？",
+    "seeAll": "查看全部 →"
+  },
+  "gallery": {
+    "label": "旅途瞬间",
+    "title": "中国在等您"
+  },
+  "tours": {
+    "label": "行程",
+    "title": "令您难忘的旅程",
+    "subtitle": "专为欧洲出发、追求深度体验的旅行者设计",
+    "from": "起价",
+    "days": "天",
+    "viewItinerary": "查看行程 →",
+    "seeAll": "查看全部 →"
+  },
+  "whyUs": {
+    "label": "为什么选择我们",
+    "title": "旅程从这里开始",
+    "visa": {
+      "title": "签证全程协助",
+      "description": "手把手指导，轻松完成签证申请"
+    },
+    "guide": {
+      "title": "双语导游服务",
+      "description": "中文、西班牙语，随时为您解说"
+    },
+    "team": {
+      "title": "欧洲本地团队",
+      "description": "总部西班牙，合作伙伴遍布中国"
+    },
+    "custom": {
+      "title": "私人定制行程",
+      "description": "告别跟团旅游，每段旅程都独一无二"
+    }
+  },
+  "reviews": {
+    "label": "旅行者评价",
+    "title": "他们这样说"
+  },
+  "contact": {
+    "label": "联系我们",
+    "title": "有任何疑问？",
+    "subtitle": "通过微信或 WhatsApp 联系我们，24小时内回复，免费为您定制专属行程。",
+    "cta": "联系旅行顾问",
+    "name": "您的姓名",
+    "email": "邮箱地址",
+    "destination": "感兴趣的目的地",
+    "send": "发送咨询"
+  },
+  "footer": {
+    "copyright": "© 2025 · 总部西班牙 · 合作伙伴遍布中国"
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "nav": {
+    "destinations": "Destinos",
+    "tours": "Viajes",
+    "customize": "Personalizar",
+    "about": "Nosotros",
+    "contact": "Contacto",
+    "tagline": "desde Europa"
+  },
+  "hero": {
+    "eyebrow": "Viajes a China desde Europa",
+    "title1": "Descubre",
+    "title2": "la China",
+    "title3": "auténtica",
+    "subtitle": "Itinerarios exclusivos con guías en español, visado sin estrés y experiencias únicas.",
+    "cta": "Ver Itinerarios",
+    "cta2": "Consulta Gratuita"
+  },
+  "stats": {
+    "travelers": "Viajeros",
+    "destinations": "Destinos",
+    "years": "Años"
+  },
+  "destinations": {
+    "label": "DESTINOS",
+    "title": "¿A dónde te llevamos?",
+    "seeAll": "Ver todos →"
+  },
+  "gallery": {
+    "label": "MOMENTOS",
+    "title": "China te espera"
+  },
+  "tours": {
+    "label": "ITINERARIOS",
+    "title": "Viajes que recordarás",
+    "subtitle": "Diseñados para viajeros europeos que quieren ir más allá",
+    "from": "Desde",
+    "days": "días",
+    "viewItinerary": "Ver itinerario →",
+    "seeAll": "Ver todos →"
+  },
+  "whyUs": {
+    "label": "POR QUÉ NOSOTROS",
+    "title": "Tu viaje empieza aquí",
+    "visa": {
+      "title": "Asistencia de Visado",
+      "description": "Te guiamos paso a paso en todo el proceso"
+    },
+    "guide": {
+      "title": "Guías en Español",
+      "description": "Tu idioma en cada ciudad, en cada momento"
+    },
+    "team": {
+      "title": "Equipo en Europa",
+      "description": "Con sede en España y socios locales en China"
+    },
+    "custom": {
+      "title": "Viaje a tu Medida",
+      "description": "Nada de grupos masivos. Cada viaje es único"
+    }
+  },
+  "reviews": {
+    "label": "TESTIMONIOS",
+    "title": "Lo que dicen nuestros viajeros"
+  },
+  "contact": {
+    "label": "Contacto",
+    "title": "¿Tienes alguna pregunta?",
+    "subtitle": "Escríbenos por WhatsApp o WeChat. Respondemos en menos de 24 horas y diseñamos tu viaje sin compromiso.",
+    "cta": "Hablar con un experto",
+    "name": "Tu nombre",
+    "email": "Tu email",
+    "destination": "Destino de interés",
+    "send": "Enviar consulta"
+  },
+  "footer": {
+    "copyright": "© 2025 · Con sede en España · Socios en toda China"
+  }
+}

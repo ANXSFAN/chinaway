@@ -1,0 +1,79 @@
+{
+  "nav": {
+    "destinations": "Destinations",
+    "tours": "Tours",
+    "customize": "Customize",
+    "about": "About",
+    "contact": "Contact",
+    "tagline": "from Europe"
+  },
+  "hero": {
+    "eyebrow": "China Journeys from Europe",
+    "title1": "Discover",
+    "title2": "authentic",
+    "title3": "China",
+    "subtitle": "Exclusive itineraries with Spanish-speaking guides, stress-free visas and unique experiences.",
+    "cta": "Explore Tours",
+    "cta2": "Free Consultation"
+  },
+  "stats": {
+    "travelers": "Travellers",
+    "destinations": "Destinations",
+    "years": "Years"
+  },
+  "destinations": {
+    "label": "DESTINATIONS",
+    "title": "Where shall we take you?",
+    "seeAll": "See all →"
+  },
+  "gallery": {
+    "label": "MOMENTS",
+    "title": "China awaits"
+  },
+  "tours": {
+    "label": "ITINERARIES",
+    "title": "Journeys you'll never forget",
+    "subtitle": "Built for European travellers who want to go beyond the surface",
+    "from": "From",
+    "days": "days",
+    "viewItinerary": "View itinerary →",
+    "seeAll": "See all →"
+  },
+  "whyUs": {
+    "label": "WHY US",
+    "title": "Your journey starts here",
+    "visa": {
+      "title": "Visa Assistance",
+      "description": "Step-by-step guidance through the whole process"
+    },
+    "guide": {
+      "title": "Spanish-Speaking Guides",
+      "description": "Your language in every city, every moment"
+    },
+    "team": {
+      "title": "European-Based Team",
+      "description": "HQ in Spain, local partners across China"
+    },
+    "custom": {
+      "title": "Tailor-Made Travel",
+      "description": "No mass groups. Every trip is one of a kind"
+    }
+  },
+  "reviews": {
+    "label": "TESTIMONIALS",
+    "title": "What our travellers say"
+  },
+  "contact": {
+    "label": "Contact",
+    "title": "Have a question?",
+    "subtitle": "Message us on WhatsApp or WeChat. We reply within 24 hours and design your trip with no commitment.",
+    "cta": "Talk to an expert",
+    "name": "Your name",
+    "email": "Your email",
+    "destination": "Destination of interest",
+    "send": "Send inquiry"
+  },
+  "footer": {
+    "copyright": "© 2025 · Based in Spain · Partners across China"
+  }
+}
