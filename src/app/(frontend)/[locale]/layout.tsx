@@ -7,7 +7,7 @@ import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { CookieBanner } from '@/components/layout/CookieBanner'
 import { TravelAgencyJsonLd } from '@/components/seo/JsonLd'
-import '../../globals.css'
+import '../frontend.css'
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
 
