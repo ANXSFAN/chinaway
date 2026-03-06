@@ -1,8 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
+import dynamic from 'next/dynamic'
 import { useTranslations, useLocale } from 'next-intl'
 import { SectionLabel } from '@/components/ui/SectionLabel'
+
+const ChinaMap = dynamic(() => import('@/components/map/ChinaMap'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full flex items-center justify-center bg-[#f5f3ef]">
+      <div className="w-8 h-8 border-2 border-red border-t-transparent rounded-full animate-spin" />
+    </div>
+  ),
+})
 
 type Locale = 'es' | 'en' | 'zh'
 
@@ -109,6 +119,17 @@ export function CustomTravelClient({ provinces }: { provinces: Province[] }) {
     )
   }
 
+  const mapClickRef = useCallback(
+    (provinceId: string) => {
+      setSelectedProvinces((prev) =>
+        prev.includes(provinceId)
+          ? prev.filter((p) => p !== provinceId)
+          : [...prev, provinceId]
+      )
+    },
+    []
+  )
+
   const toggleInterest = (value: string) => {
     setSelectedInterests((prev) =>
       prev.includes(value) ? prev.filter((i) => i !== value) : [...prev, value]
@@ -151,6 +172,39 @@ export function CustomTravelClient({ provinces }: { provinces: Province[] }) {
           {step === 1 && (
             <div>
               <h2 className="font-playfair text-2xl font-bold mb-6">{labels.step1[locale]}</h2>
+
+              {/* Interactive map */}
+              <div className="w-full h-[400px] mb-6 rounded-sm overflow-hidden border border-[#e0e0e0]">
+                <ChinaMap
+                  locale={locale}
+                  onProvinceClick={mapClickRef}
+                />
+              </div>
+
+              {/* Selected provinces display */}
+              {selectedProvinces.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {selectedProvinces.map((id) => {
+                    const province = provinces.find((p) => p.id === id)
+                    return (
+                      <span
+                        key={id}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red/10 text-red border border-red/20 rounded-full font-dm text-xs font-medium"
+                      >
+                        {province?.name || id}
+                        <button
+                          onClick={() => toggleProvince(id)}
+                          className="hover:text-red-dark"
+                        >
+                          &times;
+                        </button>
+                      </span>
+                    )
+                  })}
+                </div>
+              )}
+
+              {/* Province buttons (also selectable) */}
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {provinces.map((p) => (
                   <button

@@ -76,12 +76,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   )
 
   // Photo strip
-  const photoStrip = (homePage.photoStrip || []).map(
-    (p: { imageUrl?: string; image?: { url: string } | null }) => ({
-      imageUrl: p.imageUrl,
-      image: p.image,
-    }),
-  )
+  const photoStrip = (homePage.photoStrip || []).map((p: any) => ({
+    imageUrl: p.imageUrl,
+    image: p.image,
+  }))
 
   // Banner
   const banner = {
@@ -94,23 +92,19 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   }
 
   // Why us cards
-  const whyUsCards = (homePage.whyUsCards || []).map(
-    (c: { iconType: string; title: string; description: string }) => ({
-      iconType: c.iconType,
-      title: c.title,
-      description: c.description,
-    }),
-  )
+  const whyUsCards = (homePage.whyUsCards || []).map((c: any) => ({
+    iconType: c.iconType || '',
+    title: c.title || '',
+    description: c.description || '',
+  }))
 
   // Map provinces
-  const mapProvinces = (homePage.mapProvinces || []).map(
-    (p: { provinceId: string; description: string; tours: number; highlights: string }) => ({
-      provinceId: p.provinceId,
-      description: p.description,
-      tours: p.tours,
-      highlights: p.highlights,
-    }),
-  )
+  const mapProvinces = (homePage.mapProvinces || []).map((p: any) => ({
+    provinceId: p.provinceId || '',
+    description: p.description || '',
+    tours: p.tours || 0,
+    highlights: p.highlights || '',
+  }))
 
   const mapIntro = homePage.mapSection?.intro || ''
   const mapTagline = homePage.mapSection?.tagline || ''

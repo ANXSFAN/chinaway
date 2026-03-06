@@ -4,6 +4,7 @@ import config from '@payload-config'
 import { getTranslations } from 'next-intl/server'
 import { SectionLabel } from '@/components/ui/SectionLabel'
 import { Link } from '@/i18n/navigation'
+import { BookingButton } from '@/components/booking/BookingButton'
 
 function formatDate(dateStr: string, locale: string) {
   const date = new Date(dateStr)
@@ -118,9 +119,16 @@ export default async function UpcomingPage({ params }: { params: Promise<{ local
                             <div className={`font-dm text-sm ${urgency ? 'text-red font-medium' : 'text-gray'}`}>
                               {spotsLeft} {t('spotsLeft')}
                             </div>
-                            <button className="font-dm text-[11px] font-medium tracking-[.08em] uppercase px-5 py-2.5 bg-red text-white hover:bg-red-dark transition-colors duration-200">
+                            <BookingButton
+                              tourId={tour.id}
+                              tourTitle={tour.title || ''}
+                              departureDate={dep.date}
+                              depositAmount={depositAmount}
+                              locale={locale}
+                              className="font-dm text-[11px] font-medium tracking-[.08em] uppercase px-5 py-2.5 bg-red text-white hover:bg-red-dark transition-colors duration-200"
+                            >
                               {t('book')} · {depositAmount}€ {t('deposit')}
-                            </button>
+                            </BookingButton>
                           </div>
                         )
                       })}

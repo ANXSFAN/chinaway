@@ -125,13 +125,11 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   )
 
   // Values from CMS
-  const values: { iconType: string; title: string; description: string }[] = (aboutPage.values || []).map(
-    (item: { iconType: string; title: string; description: string }) => ({
-      iconType: item.iconType,
-      title: item.title,
-      description: item.description,
-    }),
-  )
+  const values = (aboutPage.values || []).map((item: any) => ({
+    iconType: item.iconType || '',
+    title: item.title || '',
+    description: item.description || '',
+  }))
 
   // Stats from SiteSettings
   const stats = {

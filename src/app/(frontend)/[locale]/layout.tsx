@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
 import { notFound } from 'next/navigation'
@@ -10,6 +11,8 @@ import { Footer } from '@/components/layout/Footer'
 import { CookieBanner } from '@/components/layout/CookieBanner'
 import { TravelAgencyJsonLd } from '@/components/seo/JsonLd'
 import '../frontend.css'
+
+const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
 
@@ -78,6 +81,17 @@ export default async function LocaleLayout({ children, params }: Props) {
         />
       </head>
       <body className="font-dm text-black bg-white overflow-x-hidden">
+        {gaId && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga4-init" strategy="afterInteractive">
+              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaId}');`}
+            </Script>
+          </>
+        )}
         <NextIntlClientProvider messages={messages}>
           <Navbar locale={locale} />
           <main>{children}</main>

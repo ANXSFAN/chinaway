@@ -1059,8 +1059,8 @@ export async function seed() {
       data: {
         slug: dest.slug,
         name: dest.name.es,
-        province: dest.province,
-        theme: dest.theme,
+        province: dest.province as any,
+        theme: dest.theme as any,
         featured: dest.featured,
         imageUrl: dest.imageUrl,
         coverImage: mediaId,
@@ -1531,7 +1531,7 @@ export async function seed() {
 
     const doc = await payload.create({
       collection: 'tours',
-      data: esData,
+      data: esData as any,
     })
 
     // Update EN
@@ -1950,7 +1950,7 @@ export async function seed() {
 
     const doc = await payload.create({
       collection: 'posts',
-      data: esData,
+      data: esData as any,
     })
 
     // Update EN

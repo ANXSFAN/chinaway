@@ -5,6 +5,7 @@ import { SectionLabel } from '@/components/ui/SectionLabel'
 import { Link } from '@/i18n/navigation'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import { BookingButton } from '@/components/booking/BookingButton'
 
 /** Extract plain text from Lexical richText JSON */
 function extractText(richText: any): string {
@@ -200,9 +201,16 @@ export default async function TourDetailPage({ params }: { params: Promise<{ loc
                   </div>
                 )}
 
-                <button className="w-full font-dm text-xs font-medium tracking-[.12em] uppercase py-4 bg-red text-white hover:bg-red-dark hover:-translate-y-px hover:shadow-[0_8px_24px_rgba(208,2,27,.3)] transition-all duration-250">
+                <BookingButton
+                  tourId={tour.id}
+                  tourTitle={tour.title || ''}
+                  departureDate={tour.departures?.[0]?.date || ''}
+                  depositAmount={depositAmount}
+                  locale={locale}
+                  className="w-full font-dm text-xs font-medium tracking-[.12em] uppercase py-4 bg-red text-white hover:bg-red-dark hover:-translate-y-px hover:shadow-[0_8px_24px_rgba(208,2,27,.3)] transition-all duration-250"
+                >
                   {t('tourDetail.bookNow')}
-                </button>
+                </BookingButton>
                 <button className="w-full mt-3 font-dm text-xs font-medium tracking-[.1em] uppercase py-3 bg-transparent text-black border-[1.5px] border-[#ccc] hover:border-black transition-all duration-250">
                   {t('hero.cta2')}
                 </button>
