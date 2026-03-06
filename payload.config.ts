@@ -1,6 +1,7 @@
 import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { s3Storage } from '@payloadcms/storage-s3'
 import sharp from 'sharp'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -23,6 +24,26 @@ import { AboutPage } from './src/globals/AboutPage'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+// Conditionally enable S3 storage (Supabase Storage) when env vars are set
+const plugins = []
+if (process.env.S3_BUCKET) {
+  plugins.push(
+    s3Storage({
+      collections: { media: true },
+      bucket: process.env.S3_BUCKET,
+      config: {
+        endpoint: process.env.S3_ENDPOINT || '',
+        region: process.env.S3_REGION || 'eu-west-1',
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
+        },
+        forcePathStyle: true, // Required for Supabase S3-compatible API
+      },
+    }),
+  )
+}
+
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -30,6 +51,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
+  plugins,
   collections: [Users, Media, Destinations, Tours, Bookings, Inquiries, Posts, Reviews],
   globals: [SiteSettings, HomePage, AboutPage],
   editor: lexicalEditor(),
