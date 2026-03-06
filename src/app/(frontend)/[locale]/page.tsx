@@ -1,5 +1,6 @@
 import { Hero } from '@/components/home/Hero'
 import { Marquee } from '@/components/home/Marquee'
+import { MapSection } from '@/components/home/MapSection'
 import { DestinationsSection } from '@/components/home/DestinationsSection'
 import { PhotoStrip } from '@/components/home/PhotoStrip'
 import { ToursSection } from '@/components/home/ToursSection'
@@ -13,6 +14,7 @@ export default function HomePage() {
     <>
       <Hero />
       <Marquee />
+      <MapSection />
       <DestinationsSection />
       <PhotoStrip />
       <ToursSection />
