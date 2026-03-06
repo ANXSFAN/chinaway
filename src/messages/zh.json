@@ -1,8 +1,12 @@
 {
   "nav": {
+    "home": "首页",
     "destinations": "目的地",
     "tours": "行程",
+    "upcoming": "即将出发",
     "customize": "定制游",
+    "blog": "博客",
+    "info": "实用信息",
     "about": "关于我们",
     "contact": "联系",
     "tagline": "从欧洲出发"
@@ -81,6 +85,44 @@
     "days": "天",
     "departure": "出发",
     "book": "立即预订 →"
+  },
+  "upcoming": {
+    "label": "即将出发",
+    "title": "即将出发",
+    "subtitle": "已确认出发日期，名额有限。支付定金即可预订。",
+    "spotsLeft": "剩余名额",
+    "departure": "出发日期",
+    "book": "预订",
+    "deposit": "定金",
+    "noTours": "暂无即将出发的行程，请稍后再来查看！"
+  },
+  "blog": {
+    "label": "博客",
+    "title": "博客",
+    "subtitle": "为您的下一次中国之旅提供故事、建议和发现。",
+    "readMore": "阅读更多",
+    "noPosts": "暂无已发布文章，敬请期待！",
+    "backToBlog": "返回博客",
+    "relatedPosts": "相关文章",
+    "by": "作者"
+  },
+  "destinationDetail": {
+    "availableTours": "可选行程",
+    "comingSoon": "即将推出",
+    "backToDestinations": "所有目的地"
+  },
+  "tourDetail": {
+    "itinerary": "行程安排",
+    "dayLabel": "第",
+    "included": "包含项目",
+    "excluded": "不包含项目",
+    "price": "价格",
+    "deposit": "预订定金",
+    "bookNow": "立即预订",
+    "departures": "出发日期",
+    "noItinerary": "行程详情即将推出。",
+    "backToTours": "所有行程",
+    "relatedTours": "您可能还喜欢"
   },
   "footer": {
     "copyright": "© 2025 · 总部西班牙 · 合作伙伴遍布中国"

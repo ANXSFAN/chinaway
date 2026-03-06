@@ -1,8 +1,12 @@
 {
   "nav": {
+    "home": "Inicio",
     "destinations": "Destinos",
     "tours": "Viajes",
+    "upcoming": "Salidas",
     "customize": "Personalizar",
+    "blog": "Blog",
+    "info": "Info Práctica",
     "about": "Nosotros",
     "contact": "Contacto",
     "tagline": "desde Europa"
@@ -81,6 +85,44 @@
     "days": "días",
     "departure": "Sale",
     "book": "Reservar →"
+  },
+  "upcoming": {
+    "label": "SALIDAS PRÓXIMAS",
+    "title": "Salidas Próximas",
+    "subtitle": "Fechas confirmadas con plazas limitadas. Reserva tu plaza con un depósito.",
+    "spotsLeft": "plazas libres",
+    "departure": "Salida",
+    "book": "Reservar",
+    "deposit": "depósito",
+    "noTours": "No hay salidas próximas en este momento. ¡Vuelve pronto!"
+  },
+  "blog": {
+    "label": "BLOG",
+    "title": "Blog",
+    "subtitle": "Historias, consejos y descubrimientos para tu próximo viaje a China.",
+    "readMore": "Leer más",
+    "noPosts": "Aún no hay artículos publicados. ¡Vuelve pronto!",
+    "backToBlog": "Volver al blog",
+    "relatedPosts": "Artículos relacionados",
+    "by": "Por"
+  },
+  "destinationDetail": {
+    "availableTours": "Viajes disponibles",
+    "comingSoon": "Próximamente",
+    "backToDestinations": "Todos los destinos"
+  },
+  "tourDetail": {
+    "itinerary": "Itinerario",
+    "dayLabel": "Día",
+    "included": "Incluido",
+    "excluded": "No incluido",
+    "price": "Precio",
+    "deposit": "Depósito para reservar",
+    "bookNow": "Reservar ahora",
+    "departures": "Salidas",
+    "noItinerary": "Detalles del itinerario próximamente.",
+    "backToTours": "Todos los viajes",
+    "relatedTours": "También te puede interesar"
   },
   "footer": {
     "copyright": "© 2025 · Con sede en España · Socios en toda China"

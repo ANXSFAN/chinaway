@@ -23,9 +23,13 @@ export function Navbar({ locale }: { locale: string }) {
   }, [])
 
   const navItems = [
+    { label: t('home'), href: '/' },
     { label: t('destinations'), href: '/destinations' },
     { label: t('tours'), href: '/tours' },
+    { label: t('upcoming'), href: '/upcoming' },
     { label: t('customize'), href: '/custom' },
+    { label: t('blog'), href: '/blog' },
+    { label: t('info'), href: '/info' },
     { label: t('about'), href: '/about' },
     { label: t('contact'), href: '/contact' },
   ]
@@ -62,7 +66,7 @@ export function Navbar({ locale }: { locale: string }) {
       </Link>
 
       {/* Desktop Nav */}
-      <nav className="hidden lg:flex gap-[30px]">
+      <nav className="hidden lg:flex gap-5">
         {navItems.map((item) => (
           <Link
             key={item.href}

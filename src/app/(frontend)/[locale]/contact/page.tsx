@@ -1,34 +1,73 @@
-import { useTranslations, useLocale } from 'next-intl'
+import Image from 'next/image'
+import { getPayload } from 'payload'
+import config from '@payload-config'
+import { getTranslations } from 'next-intl/server'
 import { SectionLabel } from '@/components/ui/SectionLabel'
+import { ContactForm } from '@/components/contact/ContactForm'
 
-export default function ContactPage() {
-  const t = useTranslations('contact')
-  const locale = useLocale() as 'es' | 'en' | 'zh'
+type Locale = 'es' | 'en' | 'zh'
 
-  const pageTitle = { es: 'Contacto', en: 'Contact', zh: '联系我们' }
-  const pageSubtitle = {
-    es: 'Estamos aquí para ayudarte a planificar tu viaje perfecto a China.',
-    en: 'We\'re here to help you plan your perfect China trip.',
-    zh: '我们随时为您的完美中国之旅提供帮助。',
-  }
-  const infoTitle = { es: 'Información de contacto', en: 'Contact information', zh: '联系方式' }
+const pageTitle = { es: 'Contacto', en: 'Contact', zh: '联系我们' }
+const pageSubtitle = {
+  es: 'Estamos aquí para ayudarte a planificar tu viaje perfecto a China.',
+  en: 'We\'re here to help you plan your perfect China trip.',
+  zh: '我们随时为您的完美中国之旅提供帮助。',
+}
+const infoTitle = { es: 'Información de contacto', en: 'Contact information', zh: '联系方式' }
+
+const contactDescriptions = {
+  whatsapp: { es: 'Respuesta en < 24h', en: 'Response within 24h', zh: '24小时内回复' },
+  wechat: { es: 'Escanea el QR o busca nuestro ID', en: 'Scan QR or search our ID', zh: '扫码或搜索ID' },
+  email: { es: 'Para consultas detalladas', en: 'For detailed inquiries', zh: '详细咨询请发邮件' },
+}
+
+export default async function ContactPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
+  const loc = locale as Locale
+  const payload = await getPayload({ config })
+  const t = await getTranslations({ locale, namespace: 'contact' })
+
+  const [siteSettings, destinationsResult] = await Promise.all([
+    payload.findGlobal({ slug: 'site-settings' }),
+    payload.find({
+      collection: 'destinations',
+      where: { status: { equals: 'published' } },
+      locale: loc,
+      limit: 100,
+    }),
+  ])
+
+  const whatsapp = siteSettings.contact?.whatsapp || '+34 600 000 000'
+  const wechat = siteSettings.contact?.wechat || 'ChinaWayTravel'
+  const email = siteSettings.contact?.email || 'info@chinaway.es'
+  const companyName = siteSettings.company?.name || 'ChinaWay Travel S.L.'
+  const companyAddress = siteSettings.company?.address || 'Madrid, España'
+  const companyCif = siteSettings.company?.cif || 'B-12345678'
+
+  const destinations = destinationsResult.docs.map((d: any) => ({
+    id: d.id,
+    name: d.name as string,
+  }))
 
   return (
     <>
       {/* Hero */}
       <section className="relative h-[40vh] min-h-[300px] overflow-hidden flex items-end">
-        <img
+        <Image
           src="https://picsum.photos/id/1038/1800/900"
           alt="Contact"
-          className="absolute inset-0 w-full h-full object-cover"
+          fill
+          priority
+          className="object-cover"
+          sizes="100vw"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/10" />
         <div className="relative w-full max-w-[1200px] mx-auto px-[6%] pb-12">
           <SectionLabel>{t('label')}</SectionLabel>
           <h1 className="font-playfair text-[clamp(36px,5vw,64px)] font-bold text-white leading-tight">
-            {pageTitle[locale]}
+            {pageTitle[loc]}
           </h1>
-          <p className="font-dm text-base text-white/70 mt-3">{pageSubtitle[locale]}</p>
+          <p className="font-dm text-base text-white/70 mt-3">{pageSubtitle[loc]}</p>
         </div>
       </section>
 
@@ -37,26 +76,26 @@ export default function ContactPage() {
         <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16">
           {/* Contact info */}
           <div>
-            <h2 className="font-playfair text-2xl font-bold mb-6">{infoTitle[locale]}</h2>
+            <h2 className="font-playfair text-2xl font-bold mb-6">{infoTitle[loc]}</h2>
             <div className="space-y-6">
               {[
                 {
                   icon: 'W',
                   label: 'WhatsApp',
-                  value: '+34 600 000 000',
-                  desc: { es: 'Respuesta en < 24h', en: 'Response within 24h', zh: '24小时内回复' },
+                  value: whatsapp,
+                  desc: contactDescriptions.whatsapp[loc],
                 },
                 {
                   icon: '微',
                   label: 'WeChat',
-                  value: 'ChinaWayTravel',
-                  desc: { es: 'Escanea el QR o busca nuestro ID', en: 'Scan QR or search our ID', zh: '扫码或搜索ID' },
+                  value: wechat,
+                  desc: contactDescriptions.wechat[loc],
                 },
                 {
                   icon: '@',
                   label: 'Email',
-                  value: 'info@chinaway.es',
-                  desc: { es: 'Para consultas detalladas', en: 'For detailed inquiries', zh: '详细咨询请发邮件' },
+                  value: email,
+                  desc: contactDescriptions.email[loc],
                 },
               ].map((item) => (
                 <div key={item.label} className="flex items-start gap-4">
@@ -66,65 +105,33 @@ export default function ContactPage() {
                   <div>
                     <div className="font-dm text-xs text-gray uppercase tracking-[.08em]">{item.label}</div>
                     <div className="font-dm text-base font-medium mt-0.5">{item.value}</div>
-                    <div className="font-dm text-sm text-gray mt-0.5">{item.desc[locale]}</div>
+                    <div className="font-dm text-sm text-gray mt-0.5">{item.desc}</div>
                   </div>
                 </div>
               ))}
             </div>
 
             <div className="mt-10 p-6 bg-cream rounded-sm">
-              <div className="font-playfair text-lg font-bold mb-2">ChinaWay Travel S.L.</div>
+              <div className="font-playfair text-lg font-bold mb-2">{companyName}</div>
               <div className="font-dm text-sm text-gray leading-relaxed">
-                Madrid, España<br />
-                CIF: B-12345678
+                {companyAddress}<br />
+                CIF: {companyCif}
               </div>
             </div>
           </div>
 
           {/* Contact form */}
-          <div>
-            <h2 className="font-playfair text-2xl font-bold mb-6">{t('title')}</h2>
-            <p className="font-dm text-sm text-gray leading-relaxed mb-8">{t('subtitle')}</p>
-            <div className="space-y-4">
-              <input
-                type="text"
-                placeholder={t('name')}
-                className="w-full py-3 px-4 border-[1.5px] border-[#e0e0e0] rounded-sm font-dm text-sm outline-none focus:border-red transition-colors"
-              />
-              <input
-                type="email"
-                placeholder={t('email')}
-                className="w-full py-3 px-4 border-[1.5px] border-[#e0e0e0] rounded-sm font-dm text-sm outline-none focus:border-red transition-colors"
-              />
-              <select
-                defaultValue=""
-                className="w-full py-3 px-4 border-[1.5px] border-[#e0e0e0] rounded-sm font-dm text-sm outline-none focus:border-red transition-colors"
-              >
-                <option value="" disabled>{t('destination')}</option>
-                {['Guilin', 'Shanghai', 'Tibet', 'Yunnan', "Xi'an", 'Beijing', 'Zhangjiajie'].map((o) => (
-                  <option key={o}>{o}</option>
-                ))}
-              </select>
-              <textarea
-                rows={5}
-                placeholder={locale === 'es' ? 'Tu mensaje...' : locale === 'en' ? 'Your message...' : '您的留言...'}
-                className="w-full py-3 px-4 border-[1.5px] border-[#e0e0e0] rounded-sm font-dm text-sm outline-none focus:border-red transition-colors resize-none"
-              />
-              <div className="flex items-start gap-2">
-                <input type="checkbox" id="privacy" className="mt-1" />
-                <label htmlFor="privacy" className="font-dm text-xs text-gray leading-relaxed">
-                  {locale === 'es'
-                    ? 'Acepto la política de privacidad y el tratamiento de mis datos personales.'
-                    : locale === 'en'
-                      ? 'I accept the privacy policy and the processing of my personal data.'
-                      : '我接受隐私政策和个人数据处理条款。'}
-                </label>
-              </div>
-              <button className="w-full font-dm text-xs font-medium tracking-[.12em] uppercase py-4 bg-red text-white hover:bg-red-dark hover:-translate-y-px hover:shadow-[0_8px_24px_rgba(208,2,27,.3)] transition-all duration-250">
-                {t('send')}
-              </button>
-            </div>
-          </div>
+          <ContactForm
+            destinations={destinations}
+            labels={{
+              title: t('title'),
+              subtitle: t('subtitle'),
+              name: t('name'),
+              email: t('email'),
+              destination: t('destination'),
+              send: t('send'),
+            }}
+          />
         </div>
       </section>
     </>

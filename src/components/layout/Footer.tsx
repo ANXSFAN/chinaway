@@ -37,14 +37,28 @@ export function Footer() {
         </Link>
         <span className="font-dm text-[11px] text-gray">{t('copyright')}</span>
         <div className="flex gap-[22px]">
-          {['Instagram', 'WeChat', 'WhatsApp'].map((s) => (
-            <span
-              key={s}
-              className="font-dm text-[11px] text-gray cursor-pointer tracking-[.08em] uppercase hover:text-black transition-colors"
-            >
-              {s}
-            </span>
-          ))}
+          <a
+            href="https://instagram.com/chinaway"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-dm text-[11px] text-gray cursor-pointer tracking-[.08em] uppercase hover:text-black transition-colors"
+          >
+            Instagram
+          </a>
+          <span
+            className="font-dm text-[11px] text-gray cursor-pointer tracking-[.08em] uppercase hover:text-black transition-colors"
+            title="WeChat: ChinaWay"
+          >
+            WeChat
+          </span>
+          <a
+            href="https://wa.me/34600000000"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-dm text-[11px] text-gray cursor-pointer tracking-[.08em] uppercase hover:text-black transition-colors"
+          >
+            WhatsApp
+          </a>
         </div>
       </div>
       {/* Legal links */}

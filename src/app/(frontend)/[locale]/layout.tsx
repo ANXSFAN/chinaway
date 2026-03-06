@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
 import { notFound } from 'next/navigation'
+import { getPayload } from 'payload'
+import config from '@payload-config'
 import { routing } from '@/i18n/routing'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
@@ -52,7 +54,14 @@ export default async function LocaleLayout({ children, params }: Props) {
     notFound()
   }
 
-  const messages = await getMessages()
+  const [messages, siteSettings] = await Promise.all([
+    getMessages(),
+    getPayload({ config }).then((p) => p.findGlobal({ slug: 'site-settings' })),
+  ])
+
+  const companyName = siteSettings.company?.name || 'ChinaWay'
+  const companyAddress = siteSettings.company?.address || 'Madrid'
+  const companyEmail = siteSettings.contact?.email || 'info@chinaway.es'
 
   return (
     <html lang={locale}>
@@ -61,7 +70,12 @@ export default async function LocaleLayout({ children, params }: Props) {
           href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap"
           rel="stylesheet"
         />
-        <TravelAgencyJsonLd />
+        <TravelAgencyJsonLd
+          companyName={companyName as string}
+          address={companyAddress as string}
+          email={companyEmail as string}
+          url={baseUrl}
+        />
       </head>
       <body className="font-dm text-black bg-white overflow-x-hidden">
         <NextIntlClientProvider messages={messages}>

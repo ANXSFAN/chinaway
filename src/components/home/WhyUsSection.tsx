@@ -3,7 +3,16 @@
 import { useTranslations } from 'next-intl'
 import { SectionLabel } from '@/components/ui/SectionLabel'
 
-const iconKeys = ['visa', 'guide', 'team', 'custom'] as const
+type WhyUsCard = {
+  iconType: string
+  title: string
+  description: string
+}
+
+type Props = {
+  cards: WhyUsCard[]
+  stats: { travelers: string; destinations: string; years: string }
+}
 
 function TrustIcon({ type }: { type: string }) {
   return (
@@ -42,8 +51,17 @@ function TrustIcon({ type }: { type: string }) {
   )
 }
 
-export function WhyUsSection() {
+export function WhyUsSection({ cards, stats }: Props) {
   const t = useTranslations()
+
+  // Fallback to i18n keys if no cards from CMS
+  const displayCards = cards.length > 0
+    ? cards
+    : (['visa', 'guide', 'team', 'custom'] as const).map((key) => ({
+        iconType: key,
+        title: t(`whyUs.${key}.title`),
+        description: t(`whyUs.${key}.description`),
+      }))
 
   return (
     <section className="py-24 px-[6%]">
@@ -52,19 +70,19 @@ export function WhyUsSection() {
         <h2 className="font-playfair text-[clamp(28px,4vw,48px)] font-bold mb-12">{t('whyUs.title')}</h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {iconKeys.map((key) => (
+          {displayCards.map((card, i) => (
             <div
-              key={key}
+              key={card.iconType || i}
               className="p-7 border-[1.5px] border-[#ebebeb] transition-all duration-300 hover:border-red hover:-translate-y-[3px] hover:shadow-[0_12px_40px_rgba(208,2,27,.08)]"
             >
               <div className="mb-5">
-                <TrustIcon type={key} />
+                <TrustIcon type={card.iconType} />
               </div>
               <div className="font-playfair text-lg font-bold mb-2.5 leading-tight">
-                {t(`whyUs.${key}.title`)}
+                {card.title}
               </div>
               <div className="font-dm text-[13px] text-gray font-light leading-relaxed">
-                {t(`whyUs.${key}.description`)}
+                {card.description}
               </div>
             </div>
           ))}
@@ -73,9 +91,9 @@ export function WhyUsSection() {
         {/* Stats bar */}
         <div className="mt-14 bg-black grid grid-cols-3">
           {[
-            ['500+', t('stats.travelers')],
-            ['20+', t('stats.destinations')],
-            ['8', t('stats.years')],
+            [stats.travelers, t('stats.travelers')],
+            [stats.destinations, t('stats.destinations')],
+            [stats.years, t('stats.years')],
           ].map(([num, label], i) => (
             <div
               key={i}

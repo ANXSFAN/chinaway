@@ -74,6 +74,7 @@ export interface Config {
     bookings: Booking;
     inquiries: Inquiry;
     posts: Post;
+    reviews: Review;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -88,6 +89,7 @@ export interface Config {
     bookings: BookingsSelect<false> | BookingsSelect<true>;
     inquiries: InquiriesSelect<false> | InquiriesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
+    reviews: ReviewsSelect<false> | ReviewsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -97,8 +99,16 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: ('false' | 'none' | 'null') | false | null | ('es' | 'en' | 'zh') | ('es' | 'en' | 'zh')[];
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'site-settings': SiteSetting;
+    'home-page': HomePage;
+    'about-page': AboutPage;
+  };
+  globalsSelect: {
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    'home-page': HomePageSelect<false> | HomePageSelect<true>;
+    'about-page': AboutPageSelect<false> | AboutPageSelect<true>;
+  };
   locale: 'es' | 'en' | 'zh';
   widgets: {
     collections: CollectionsWidget;
@@ -261,6 +271,15 @@ export interface Destination {
         id?: string | null;
       }[]
     | null;
+  /**
+   * External image URL (fallback if no upload)
+   */
+  imageUrl?: string | null;
+  longDescription?: string | null;
+  /**
+   * Key highlights separated by " · "
+   */
+  highlights?: string | null;
   featured?: boolean | null;
   status: 'draft' | 'published';
   updatedAt: string;
@@ -357,6 +376,10 @@ export interface Tour {
    * Deposit amount in EUR
    */
   depositAmount?: number | null;
+  /**
+   * External image URL (fallback if no upload)
+   */
+  imageUrl?: string | null;
   status: 'draft' | 'published' | 'archived';
   updatedAt: string;
   createdAt: string;
@@ -433,7 +456,26 @@ export interface Post {
   excerpt?: string | null;
   coverImage?: (number | null) | Media;
   category?: ('tips' | 'destinations' | 'culture' | 'food' | 'news') | null;
+  imageUrl?: string | null;
+  author?: string | null;
+  relatedPosts?: (number | Post)[] | null;
   publishedAt?: string | null;
+  status: 'draft' | 'published';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviews".
+ */
+export interface Review {
+  id: number;
+  customerName: string;
+  customerLocation?: string | null;
+  rating: number;
+  content: string;
+  tour?: (number | null) | Tour;
+  tourName?: string | null;
   status: 'draft' | 'published';
   updatedAt: string;
   createdAt: string;
@@ -489,6 +531,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'posts';
         value: number | Post;
+      } | null)
+    | ({
+        relationTo: 'reviews';
+        value: number | Review;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -624,6 +670,9 @@ export interface DestinationsSelect<T extends boolean = true> {
         image?: T;
         id?: T;
       };
+  imageUrl?: T;
+  longDescription?: T;
+  highlights?: T;
   featured?: T;
   status?: T;
   updatedAt?: T;
@@ -665,6 +714,7 @@ export interface ToursSelect<T extends boolean = true> {
         id?: T;
       };
   depositAmount?: T;
+  imageUrl?: T;
   status?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -716,7 +766,25 @@ export interface PostsSelect<T extends boolean = true> {
   excerpt?: T;
   coverImage?: T;
   category?: T;
+  imageUrl?: T;
+  author?: T;
+  relatedPosts?: T;
   publishedAt?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviews_select".
+ */
+export interface ReviewsSelect<T extends boolean = true> {
+  customerName?: T;
+  customerLocation?: T;
+  rating?: T;
+  content?: T;
+  tour?: T;
+  tourName?: T;
   status?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -760,6 +828,238 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  company?: {
+    name?: string | null;
+    cif?: string | null;
+    address?: string | null;
+    foundedYear?: number | null;
+  };
+  contact?: {
+    whatsapp?: string | null;
+    wechat?: string | null;
+    email?: string | null;
+    privacyEmail?: string | null;
+  };
+  stats?: {
+    travelers?: string | null;
+    destinations?: string | null;
+    years?: string | null;
+  };
+  social?: {
+    instagram?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-page".
+ */
+export interface HomePage {
+  id: number;
+  hero?: {
+    imageUrl?: string | null;
+    image?: (number | null) | Media;
+  };
+  marqueeCities?:
+    | {
+        city: string;
+        id?: string | null;
+      }[]
+    | null;
+  photoStrip?:
+    | {
+        imageUrl?: string | null;
+        image?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  banner?: {
+    imageUrl?: string | null;
+    image?: (number | null) | Media;
+    location?: string | null;
+    quote?: string | null;
+  };
+  whyUsCards?:
+    | {
+        iconType?: ('visa' | 'guide' | 'team' | 'custom') | null;
+        title: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  mapProvinces?:
+    | {
+        provinceId: string;
+        description?: string | null;
+        tours?: number | null;
+        highlights?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  mapSection?: {
+    intro?: string | null;
+    tagline?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-page".
+ */
+export interface AboutPage {
+  id: number;
+  heroImageUrl?: string | null;
+  heroImage?: (number | null) | Media;
+  storyImageUrl?: string | null;
+  storyImage?: (number | null) | Media;
+  storyParagraphs?:
+    | {
+        paragraph: string;
+        id?: string | null;
+      }[]
+    | null;
+  values?:
+    | {
+        iconType?: ('globe' | 'shield' | 'people' | 'card') | null;
+        title: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  company?:
+    | T
+    | {
+        name?: T;
+        cif?: T;
+        address?: T;
+        foundedYear?: T;
+      };
+  contact?:
+    | T
+    | {
+        whatsapp?: T;
+        wechat?: T;
+        email?: T;
+        privacyEmail?: T;
+      };
+  stats?:
+    | T
+    | {
+        travelers?: T;
+        destinations?: T;
+        years?: T;
+      };
+  social?:
+    | T
+    | {
+        instagram?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-page_select".
+ */
+export interface HomePageSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        imageUrl?: T;
+        image?: T;
+      };
+  marqueeCities?:
+    | T
+    | {
+        city?: T;
+        id?: T;
+      };
+  photoStrip?:
+    | T
+    | {
+        imageUrl?: T;
+        image?: T;
+        id?: T;
+      };
+  banner?:
+    | T
+    | {
+        imageUrl?: T;
+        image?: T;
+        location?: T;
+        quote?: T;
+      };
+  whyUsCards?:
+    | T
+    | {
+        iconType?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  mapProvinces?:
+    | T
+    | {
+        provinceId?: T;
+        description?: T;
+        tours?: T;
+        highlights?: T;
+        id?: T;
+      };
+  mapSection?:
+    | T
+    | {
+        intro?: T;
+        tagline?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about-page_select".
+ */
+export interface AboutPageSelect<T extends boolean = true> {
+  heroImageUrl?: T;
+  heroImage?: T;
+  storyImageUrl?: T;
+  storyImage?: T;
+  storyParagraphs?:
+    | T
+    | {
+        paragraph?: T;
+        id?: T;
+      };
+  values?:
+    | T
+    | {
+        iconType?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

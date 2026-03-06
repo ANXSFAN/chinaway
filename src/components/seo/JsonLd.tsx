@@ -1,20 +1,32 @@
-export function TravelAgencyJsonLd() {
+export function TravelAgencyJsonLd({
+  companyName,
+  address,
+  email,
+  url,
+}: {
+  companyName?: string
+  address?: string
+  email?: string
+  url?: string
+}) {
+  const name = companyName || 'ChinaWay'
+  const siteUrl = url || 'https://chinaway.es'
   const data = {
     '@context': 'https://schema.org',
     '@type': 'TravelAgency',
-    name: 'ChinaWay',
+    name,
     description: 'Viajes exclusivos a China desde Europa con guías en español, asistencia de visado y experiencias únicas.',
-    url: 'https://chinaway.es',
-    logo: 'https://chinaway.es/logo.png',
+    url: siteUrl,
+    logo: `${siteUrl}/logo.png`,
     address: {
       '@type': 'PostalAddress',
-      addressLocality: 'Madrid',
+      addressLocality: address || 'Madrid',
       addressCountry: 'ES',
     },
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'customer service',
-      email: 'info@chinaway.es',
+      email: email || 'info@chinaway.es',
       availableLanguage: ['Spanish', 'English', 'Chinese'],
     },
     sameAs: [],
@@ -73,7 +85,6 @@ export function TourJsonLd({
     provider: {
       '@type': 'TravelAgency',
       name: 'ChinaWay',
-      url: 'https://chinaway.es',
     },
   }
 

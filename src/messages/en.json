@@ -1,8 +1,12 @@
 {
   "nav": {
+    "home": "Home",
     "destinations": "Destinations",
     "tours": "Tours",
+    "upcoming": "Departures",
     "customize": "Customize",
+    "blog": "Blog",
+    "info": "Practical Info",
     "about": "About",
     "contact": "Contact",
     "tagline": "from Europe"
@@ -81,6 +85,44 @@
     "days": "days",
     "departure": "Departs",
     "book": "Book now →"
+  },
+  "upcoming": {
+    "label": "UPCOMING DEPARTURES",
+    "title": "Upcoming Departures",
+    "subtitle": "Confirmed dates with limited spots. Reserve your place with a deposit.",
+    "spotsLeft": "spots left",
+    "departure": "Departure",
+    "book": "Book",
+    "deposit": "deposit",
+    "noTours": "No upcoming departures at the moment. Check back soon!"
+  },
+  "blog": {
+    "label": "BLOG",
+    "title": "Blog",
+    "subtitle": "Stories, tips and discoveries for your next trip to China.",
+    "readMore": "Read more",
+    "noPosts": "No posts published yet. Stay tuned!",
+    "backToBlog": "Back to blog",
+    "relatedPosts": "Related posts",
+    "by": "By"
+  },
+  "destinationDetail": {
+    "availableTours": "Available tours",
+    "comingSoon": "Coming soon",
+    "backToDestinations": "All destinations"
+  },
+  "tourDetail": {
+    "itinerary": "Itinerary",
+    "dayLabel": "Day",
+    "included": "Included",
+    "excluded": "Not included",
+    "price": "Price",
+    "deposit": "Deposit to reserve",
+    "bookNow": "Book now",
+    "departures": "Departures",
+    "noItinerary": "Itinerary details coming soon.",
+    "backToTours": "All tours",
+    "relatedTours": "You may also like"
   },
   "footer": {
     "copyright": "© 2025 · Based in Spain · Partners across China"

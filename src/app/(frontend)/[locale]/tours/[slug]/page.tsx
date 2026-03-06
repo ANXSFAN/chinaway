@@ -1,161 +1,212 @@
-import { useTranslations, useLocale } from 'next-intl'
+import { getPayload } from 'payload'
+import config from '@payload-config'
+import { getTranslations } from 'next-intl/server'
 import { SectionLabel } from '@/components/ui/SectionLabel'
+import { Link } from '@/i18n/navigation'
+import { notFound } from 'next/navigation'
+import type { Metadata } from 'next'
 
-const toursData: Record<string, {
-  title: Record<string, string>
-  days: number
-  price: string
-  cities: Record<string, string>
-  badge: Record<string, string>
-  img: string
-  itinerary: { day: number; title: Record<string, string>; desc: Record<string, string> }[]
-  included: Record<string, string[]>
-  excluded: Record<string, string[]>
-}> = {
-  'silk-road': {
-    title: { es: 'Ruta de la Seda', en: 'Silk Road', zh: '丝绸之路' },
-    days: 15,
-    price: '3.490',
-    cities: { es: "Xi'an · Dunhuang · Turpán · Kashgar", en: "Xi'an · Dunhuang · Turpan · Kashgar", zh: '西安 · 敦煌 · 吐鲁番 · 喀什' },
-    badge: { es: 'Más Vendido', en: 'Best Seller', zh: '最受欢迎' },
-    img: 'https://picsum.photos/id/1043/1800/900',
-    itinerary: [
-      { day: 1, title: { es: 'Llegada a Xi\'an', en: 'Arrival in Xi\'an', zh: '抵达西安' }, desc: { es: 'Recepción en el aeropuerto y traslado al hotel. Paseo libre por el barrio musulmán.', en: 'Airport pickup and hotel transfer. Free walk through the Muslim Quarter.', zh: '机场接机，入住酒店。自由游览回民街。' } },
-      { day: 2, title: { es: 'Guerreros de Terracota', en: 'Terracotta Warriors', zh: '兵马俑' }, desc: { es: 'Visita al ejército de terracota, muralla de la ciudad y espectáculo de la dinastía Tang.', en: 'Visit the Terracotta Army, city wall and Tang Dynasty show.', zh: '参观兵马俑博物馆、古城墙，观赏唐代歌舞表演。' } },
-      { day: 3, title: { es: 'Hacia Dunhuang', en: 'To Dunhuang', zh: '前往敦煌' }, desc: { es: 'Tren de alta velocidad a Dunhuang. Tarde libre para explorar la ciudad.', en: 'High-speed train to Dunhuang. Free afternoon to explore the town.', zh: '乘高铁前往敦煌，下午自由活动。' } },
-      { day: 4, title: { es: 'Grutas de Mogao', en: 'Mogao Caves', zh: '莫高窟' }, desc: { es: 'Visita a las grutas de Mogao, Patrimonio de la Humanidad. Atardecer en las dunas de Mingsha.', en: 'Visit the UNESCO Mogao Caves. Sunset at Mingsha Sand Dunes.', zh: '参观世界文化遗产莫高窟，鸣沙山月牙泉观日落。' } },
-      { day: 5, title: { es: 'Desierto de Gobi', en: 'Gobi Desert', zh: '戈壁沙漠' }, desc: { es: 'Excursión al paso de Yumen y paisajes del desierto de Gobi.', en: 'Excursion to Yumen Pass and Gobi Desert landscapes.', zh: '游览玉门关及戈壁沙漠风光。' } },
-    ],
-    included: {
-      es: ['Vuelos internos', 'Hoteles 4-5★', 'Guía en español', 'Desayunos y 8 comidas/cenas', 'Transporte terrestre', 'Entradas a monumentos', 'Asistencia de visado'],
-      en: ['Domestic flights', '4-5★ Hotels', 'Spanish-speaking guide', 'Breakfasts + 8 lunches/dinners', 'Ground transportation', 'Monument entrance fees', 'Visa assistance'],
-      zh: ['国内机票', '四至五星酒店', '西班牙语导游', '早餐及8次正餐', '地面交通', '景点门票', '签证协助'],
-    },
-    excluded: {
-      es: ['Vuelo internacional', 'Seguro de viaje', 'Propinas', 'Gastos personales'],
-      en: ['International flights', 'Travel insurance', 'Tips', 'Personal expenses'],
-      zh: ['国际机票', '旅行保险', '小费', '个人消费'],
-    },
-  },
+/** Extract plain text from Lexical richText JSON */
+function extractText(richText: any): string {
+  if (!richText?.root?.children) return ''
+  return richText.root.children
+    .map((node: any) => {
+      if (node.children) return node.children.map((c: any) => c.text || '').join('')
+      return ''
+    })
+    .filter(Boolean)
+    .join('\n')
 }
 
-// Fallback tour
-const defaultTour = toursData['silk-road']
+export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }): Promise<Metadata> {
+  const { locale, slug } = await params
+  const payload = await getPayload({ config })
+  const { docs } = await payload.find({
+    collection: 'tours',
+    where: { slug: { equals: slug }, status: { equals: 'published' } },
+    locale: locale as 'es' | 'en' | 'zh',
+    limit: 1,
+  })
+  const tour = docs[0] as any
+  if (!tour) return {}
+  const imgSrc = tour.coverImage?.url || tour.imageUrl || ''
+  return {
+    title: tour.title,
+    description: `${tour.days} ${locale === 'zh' ? '天' : locale === 'en' ? 'days' : 'días'} · ${tour.cities || ''}`,
+    openGraph: { images: imgSrc ? [imgSrc] : [] },
+  }
+}
 
-export default function TourDetailPage() {
-  const t = useTranslations()
-  const locale = useLocale() as 'es' | 'en' | 'zh'
-  // In production, slug comes from params + CMS query
-  const tour = defaultTour
+export default async function TourDetailPage({ params }: { params: Promise<{ locale: string; slug: string }> }) {
+  const { locale, slug } = await params
+  const payload = await getPayload({ config })
+  const t = await getTranslations({ locale })
+
+  const { docs } = await payload.find({
+    collection: 'tours',
+    where: { slug: { equals: slug }, status: { equals: 'published' } },
+    locale: locale as 'es' | 'en' | 'zh',
+    limit: 1,
+  })
+
+  const tour = docs[0] as any
+  if (!tour) notFound()
+
+  const imgSrc = tour.coverImage?.url || tour.imageUrl || '/placeholder.jpg'
+  const priceDisplay = tour.price ? tour.price.toLocaleString('de-DE') : '0'
+  const depositAmount = tour.depositAmount || 100
+  const itinerary = (tour.itinerary || []) as any[]
 
   return (
     <>
       {/* Hero */}
       <section className="relative h-[55vh] min-h-[400px] overflow-hidden flex items-end">
-        <img src={tour.img} alt={tour.title.en} className="absolute inset-0 w-full h-full object-cover" />
+        <img src={imgSrc} alt={tour.title || ''} className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
         <div className="relative w-full max-w-[1200px] mx-auto px-[6%] pb-12">
-          <span className="inline-block px-2.5 py-1 bg-red text-white font-dm text-[9px] font-medium tracking-[.12em] uppercase mb-4">
-            {tour.badge[locale]}
-          </span>
+          {tour.badge && (
+            <span className="inline-block px-2.5 py-1 bg-red text-white font-dm text-[9px] font-medium tracking-[.12em] uppercase mb-4">
+              {tour.badge}
+            </span>
+          )}
           <h1 className="font-playfair text-[clamp(40px,6vw,72px)] font-bold text-white leading-tight">
-            {tour.title[locale]}
+            {tour.title}
           </h1>
           <div className="flex gap-6 mt-4">
             <span className="font-dm text-sm text-white/80">{tour.days} {t('tours.days')}</span>
-            <span className="font-dm text-sm text-white/80">{tour.cities[locale]}</span>
+            {tour.cities && <span className="font-dm text-sm text-white/80">{tour.cities}</span>}
           </div>
         </div>
       </section>
 
       {/* Content */}
       <section className="py-16 px-[6%]">
-        <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12">
-          {/* Main content */}
-          <div className="lg:col-span-2">
-            {/* Itinerary */}
-            <SectionLabel>
-              {locale === 'es' ? 'ITINERARIO' : locale === 'en' ? 'ITINERARY' : '行程安排'}
-            </SectionLabel>
-            <h2 className="font-playfair text-3xl font-bold mb-8">
-              {locale === 'es' ? 'Día a día' : locale === 'en' ? 'Day by day' : '每日行程'}
-            </h2>
+        <div className="max-w-[1200px] mx-auto">
+          <Link
+            href="/tours"
+            className="inline-flex items-center font-dm text-sm text-gray hover:text-red transition-colors mb-10"
+          >
+            &larr;&nbsp;&nbsp;{t('tourDetail.backToTours')}
+          </Link>
 
-            <div className="space-y-6">
-              {tour.itinerary.map((item) => (
-                <div key={item.day} className="flex gap-5 pb-6 border-b border-[#f0f0f0]">
-                  <div className="flex-shrink-0 w-14 h-14 bg-red flex items-center justify-center">
-                    <span className="font-playfair text-xl font-bold text-white">{item.day}</span>
-                  </div>
-                  <div>
-                    <h3 className="font-playfair text-lg font-bold mb-2">{item.title[locale]}</h3>
-                    <p className="font-dm text-sm text-gray leading-relaxed">{item.desc[locale]}</p>
-                  </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            {/* Main content */}
+            <div className="lg:col-span-2">
+              {/* Itinerary */}
+              <SectionLabel>{t('tourDetail.itinerary').toUpperCase()}</SectionLabel>
+              <h2 className="font-playfair text-3xl font-bold mb-8">
+                {t('tourDetail.itinerary')}
+              </h2>
+
+              {itinerary.length > 0 ? (
+                <div className="space-y-6">
+                  {itinerary.map((item: any) => {
+                    const descText = extractText(item.description)
+                    return (
+                      <div key={item.id || item.day} className="flex gap-5 pb-6 border-b border-[#f0f0f0]">
+                        <div className="flex-shrink-0 w-14 h-14 bg-red flex items-center justify-center">
+                          <span className="font-playfair text-xl font-bold text-white">{item.day}</span>
+                        </div>
+                        <div>
+                          <h3 className="font-playfair text-lg font-bold mb-2">{item.title}</h3>
+                          {descText && (
+                            <p className="font-dm text-sm text-gray leading-relaxed">{descText}</p>
+                          )}
+                        </div>
+                      </div>
+                    )
+                  })}
                 </div>
-              ))}
+              ) : (
+                <p className="font-dm text-sm text-gray">{t('tourDetail.noItinerary')}</p>
+              )}
+
+              {/* Included / Excluded - richText fields, show if content exists */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+                <div>
+                  <h3 className="font-playfair text-xl font-bold mb-4">{t('tourDetail.included')}</h3>
+                  {tour.included ? (
+                    <p className="font-dm text-sm text-black/80 leading-relaxed whitespace-pre-line">
+                      {extractText(tour.included) || '—'}
+                    </p>
+                  ) : (
+                    <p className="font-dm text-sm text-gray">—</p>
+                  )}
+                </div>
+                <div>
+                  <h3 className="font-playfair text-xl font-bold mb-4">{t('tourDetail.excluded')}</h3>
+                  {tour.excluded ? (
+                    <p className="font-dm text-sm text-gray leading-relaxed whitespace-pre-line">
+                      {extractText(tour.excluded) || '—'}
+                    </p>
+                  ) : (
+                    <p className="font-dm text-sm text-gray">—</p>
+                  )}
+                </div>
+              </div>
             </div>
 
-            {/* Included / Excluded */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
-              <div>
-                <h3 className="font-playfair text-xl font-bold mb-4">
-                  {locale === 'es' ? 'Incluido' : locale === 'en' ? 'Included' : '费用包含'}
-                </h3>
-                <ul className="space-y-2">
-                  {tour.included[locale].map((item, i) => (
-                    <li key={i} className="font-dm text-sm text-black/80 flex items-start gap-2">
-                      <span className="text-red mt-0.5">✓</span> {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-playfair text-xl font-bold mb-4">
-                  {locale === 'es' ? 'No incluido' : locale === 'en' ? 'Not included' : '费用不含'}
-                </h3>
-                <ul className="space-y-2">
-                  {tour.excluded[locale].map((item, i) => (
-                    <li key={i} className="font-dm text-sm text-gray flex items-start gap-2">
-                      <span className="mt-0.5">✗</span> {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          {/* Sidebar - Price & Booking */}
-          <div>
-            <div className="sticky top-28 bg-cream p-8 rounded-sm">
-              <div className="font-dm text-[10px] text-gray uppercase tracking-[.08em]">{t('tours.from')}</div>
-              <div className="font-playfair text-[42px] font-bold text-red leading-none mb-1">
-                {tour.price}€
-              </div>
-              <div className="font-dm text-sm text-gray mb-6">
-                {locale === 'es' ? 'por persona' : locale === 'en' ? 'per person' : '每人'}
-              </div>
-
-              <div className="space-y-3 mb-6 pb-6 border-b border-[#ddd]">
-                <div className="flex justify-between font-dm text-sm">
-                  <span className="text-gray">{locale === 'es' ? 'Duración' : locale === 'en' ? 'Duration' : '天数'}</span>
-                  <span className="font-medium">{tour.days} {t('tours.days')}</span>
+            {/* Sidebar - Price & Booking */}
+            <div>
+              <div className="sticky top-28 bg-cream p-8 rounded-sm">
+                <div className="font-dm text-[10px] text-gray uppercase tracking-[.08em]">{t('tours.from')}</div>
+                <div className="font-playfair text-[42px] font-bold text-red leading-none mb-1">
+                  {priceDisplay}€
                 </div>
-                <div className="flex justify-between font-dm text-sm">
-                  <span className="text-gray">{locale === 'es' ? 'Ciudades' : locale === 'en' ? 'Cities' : '城市'}</span>
-                  <span className="font-medium">{tour.itinerary.length}+</span>
+                <div className="font-dm text-sm text-gray mb-6">
+                  {locale === 'es' ? 'por persona' : locale === 'en' ? 'per person' : '每人'}
                 </div>
-                <div className="flex justify-between font-dm text-sm">
-                  <span className="text-gray">{locale === 'es' ? 'Depósito' : locale === 'en' ? 'Deposit' : '定金'}</span>
-                  <span className="font-medium">100€</span>
-                </div>
-              </div>
 
-              <button className="w-full font-dm text-xs font-medium tracking-[.12em] uppercase py-4 bg-red text-white hover:bg-red-dark hover:-translate-y-px hover:shadow-[0_8px_24px_rgba(208,2,27,.3)] transition-all duration-250">
-                {locale === 'es' ? 'Reservar ahora' : locale === 'en' ? 'Book now' : '立即预订'}
-              </button>
-              <button className="w-full mt-3 font-dm text-xs font-medium tracking-[.1em] uppercase py-3 bg-transparent text-black border-[1.5px] border-[#ccc] hover:border-black transition-all duration-250">
-                {t('hero.cta2')}
-              </button>
+                <div className="space-y-3 mb-6 pb-6 border-b border-[#ddd]">
+                  <div className="flex justify-between font-dm text-sm">
+                    <span className="text-gray">{locale === 'es' ? 'Duración' : locale === 'en' ? 'Duration' : '天数'}</span>
+                    <span className="font-medium">{tour.days} {t('tours.days')}</span>
+                  </div>
+                  {tour.cities && (
+                    <div className="flex justify-between font-dm text-sm">
+                      <span className="text-gray">{locale === 'es' ? 'Ruta' : locale === 'en' ? 'Route' : '路线'}</span>
+                      <span className="font-medium text-right max-w-[160px]">{tour.cities}</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between font-dm text-sm">
+                    <span className="text-gray">{t('tourDetail.deposit')}</span>
+                    <span className="font-medium">{depositAmount}€</span>
+                  </div>
+                </div>
+
+                {/* Departures */}
+                {tour.departures && tour.departures.length > 0 && (
+                  <div className="mb-6">
+                    <h4 className="font-dm text-xs font-medium text-gray uppercase tracking-[.08em] mb-3">
+                      {t('tourDetail.departures')}
+                    </h4>
+                    <div className="space-y-2">
+                      {tour.departures.map((dep: any) => {
+                        const spotsLeft = (dep.spotsTotal || 0) - (dep.spotsBooked || 0)
+                        const dateDisplay = new Date(dep.date).toLocaleDateString(
+                          locale === 'zh' ? 'zh-CN' : locale === 'en' ? 'en-GB' : 'es-ES',
+                          { day: 'numeric', month: 'short', year: 'numeric' }
+                        )
+                        return (
+                          <div key={dep.id || dep.date} className="flex justify-between font-dm text-sm">
+                            <span>{dateDisplay}</span>
+                            <span className={spotsLeft <= 5 ? 'text-red font-medium' : 'text-gray'}>
+                              {spotsLeft} {locale === 'es' ? 'plazas' : locale === 'en' ? 'spots' : '余位'}
+                            </span>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                <button className="w-full font-dm text-xs font-medium tracking-[.12em] uppercase py-4 bg-red text-white hover:bg-red-dark hover:-translate-y-px hover:shadow-[0_8px_24px_rgba(208,2,27,.3)] transition-all duration-250">
+                  {t('tourDetail.bookNow')}
+                </button>
+                <button className="w-full mt-3 font-dm text-xs font-medium tracking-[.1em] uppercase py-3 bg-transparent text-black border-[1.5px] border-[#ccc] hover:border-black transition-all duration-250">
+                  {t('hero.cta2')}
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -4,6 +4,9 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import sharp from 'sharp'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { zh } from '@payloadcms/translations/languages/zh'
+import { en } from '@payloadcms/translations/languages/en'
+import { es } from '@payloadcms/translations/languages/es'
 
 import { Users } from './src/collections/Users'
 import { Media } from './src/collections/Media'
@@ -12,6 +15,10 @@ import { Tours } from './src/collections/Tours'
 import { Bookings } from './src/collections/Bookings'
 import { Inquiries } from './src/collections/Inquiries'
 import { Posts } from './src/collections/Posts'
+import { Reviews } from './src/collections/Reviews'
+import { SiteSettings } from './src/globals/SiteSettings'
+import { HomePage } from './src/globals/HomePage'
+import { AboutPage } from './src/globals/AboutPage'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -23,7 +30,8 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Destinations, Tours, Bookings, Inquiries, Posts],
+  collections: [Users, Media, Destinations, Tours, Bookings, Inquiries, Posts, Reviews],
+  globals: [SiteSettings, HomePage, AboutPage],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -35,6 +43,10 @@ export default buildConfig({
     },
   }),
   sharp,
+  i18n: {
+    supportedLanguages: { zh, en, es },
+    fallbackLanguage: 'en',
+  },
   localization: {
     locales: [
       { label: 'Español', code: 'es' },

@@ -2,8 +2,14 @@
 
 import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
+import { Link } from '@/i18n/navigation'
 
-export function Hero() {
+type HeroProps = {
+  imageUrl: string
+  stats: { travelers: string; destinations: string; years: string }
+}
+
+export function Hero({ imageUrl, stats }: HeroProps) {
   const t = useTranslations()
   const [heroIn, setHeroIn] = useState(false)
 
@@ -18,7 +24,7 @@ export function Hero() {
     <section className="relative h-screen min-h-[680px] overflow-hidden">
       {/* Background image */}
       <img
-        src="https://picsum.photos/id/1015/1800/900"
+        src={imageUrl}
         alt="China landscape"
         className="absolute inset-0 w-full h-full object-cover object-[center_40%]"
       />
@@ -77,12 +83,12 @@ export function Hero() {
           }`}
           style={{ transitionDelay: '800ms' }}
         >
-          <button className="font-dm text-xs font-medium tracking-[.12em] uppercase px-[38px] py-[15px] bg-red text-white border-none hover:bg-red-dark hover:-translate-y-px hover:shadow-[0_8px_24px_rgba(208,2,27,.3)] transition-all duration-250">
+          <Link href="/tours" className="font-dm text-xs font-medium tracking-[.12em] uppercase px-[38px] py-[15px] bg-red text-white border-none hover:bg-red-dark hover:-translate-y-px hover:shadow-[0_8px_24px_rgba(208,2,27,.3)] transition-all duration-250 inline-block">
             {t('hero.cta')}
-          </button>
-          <button className="font-dm text-xs font-medium tracking-[.12em] uppercase px-[38px] py-[14px] bg-transparent text-white border-[1.5px] border-white/60 hover:bg-white/12 hover:border-white transition-all duration-250">
+          </Link>
+          <Link href="/contact" className="font-dm text-xs font-medium tracking-[.12em] uppercase px-[38px] py-[14px] bg-transparent text-white border-[1.5px] border-white/60 hover:bg-white/12 hover:border-white transition-all duration-250 inline-block">
             {t('hero.cta2')}
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -94,9 +100,9 @@ export function Hero() {
         style={{ transitionDelay: '1000ms' }}
       >
         {[
-          ['500+', t('stats.travelers')],
-          ['20+', t('stats.destinations')],
-          ['8', t('stats.years')],
+          [stats.travelers, t('stats.travelers')],
+          [stats.destinations, t('stats.destinations')],
+          [stats.years, t('stats.years')],
         ].map(([num, label], i) => (
           <div
             key={i}
