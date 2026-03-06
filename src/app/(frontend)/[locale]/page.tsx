@@ -3,6 +3,7 @@ import { Marquee } from '@/components/home/Marquee'
 import { MapSection } from '@/components/home/MapSection'
 import { DestinationsSection } from '@/components/home/DestinationsSection'
 import { PhotoStrip } from '@/components/home/PhotoStrip'
+import { ExpressSection } from '@/components/home/ExpressSection'
 import { ToursSection } from '@/components/home/ToursSection'
 import { WhyUsSection } from '@/components/home/WhyUsSection'
 import { BannerSection } from '@/components/home/BannerSection'
@@ -17,6 +18,7 @@ export default function HomePage() {
       <MapSection />
       <DestinationsSection />
       <PhotoStrip />
+      <ExpressSection />
       <ToursSection />
       <WhyUsSection />
       <BannerSection />

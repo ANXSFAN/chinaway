@@ -73,6 +73,15 @@
     "destination": "Destination of interest",
     "send": "Send inquiry"
   },
+  "express": {
+    "label": "EXPRESS DEALS",
+    "title": "Upcoming departures on sale",
+    "subtitle": "Limited spots on trips departing soon. Secure yours with just a €100 deposit.",
+    "spotsLeft": "spots",
+    "days": "days",
+    "departure": "Departs",
+    "book": "Book now →"
+  },
   "footer": {
     "copyright": "© 2025 · Based in Spain · Partners across China"
   }

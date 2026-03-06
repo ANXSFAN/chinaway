@@ -73,6 +73,15 @@
     "destination": "感兴趣的目的地",
     "send": "发送咨询"
   },
+  "express": {
+    "label": "限时优惠",
+    "title": "即将出发，特价行程",
+    "subtitle": "名额有限，仅需100€定金即可锁定席位。",
+    "spotsLeft": "余位",
+    "days": "天",
+    "departure": "出发",
+    "book": "立即预订 →"
+  },
   "footer": {
     "copyright": "© 2025 · 总部西班牙 · 合作伙伴遍布中国"
   }

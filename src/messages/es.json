@@ -73,6 +73,15 @@
     "destination": "Destino de interés",
     "send": "Enviar consulta"
   },
+  "express": {
+    "label": "OFERTAS EXPRESS",
+    "title": "Salidas inminentes con descuento",
+    "subtitle": "Plazas limitadas en viajes que salen pronto. Reserva tu plaza con solo 100€ de depósito.",
+    "spotsLeft": "plazas",
+    "days": "días",
+    "departure": "Sale",
+    "book": "Reservar →"
+  },
   "footer": {
     "copyright": "© 2025 · Con sede en España · Socios en toda China"
   }
