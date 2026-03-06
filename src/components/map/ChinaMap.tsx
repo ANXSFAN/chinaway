@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback, useRef, memo } from 'react'
+import { useEffect, useState, useCallback, useRef, useMemo, memo } from 'react'
 import { MapContainer, GeoJSON, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import type { Feature, FeatureCollection } from 'geojson'
@@ -22,13 +22,8 @@ const nameKey: Record<Locale, keyof ProvinceProperties> = {
   zh: 'name_zh',
 }
 
-const featuredProvinces = new Set([
-  'beijing', 'shanghai', 'guangxi', 'yunnan', 'sichuan',
-  'tibet', 'shaanxi', 'hunan', 'gansu', 'xinjiang',
-])
-
-function getDefaultStyle(provinceId: string): L.PathOptions {
-  const isFeatured = featuredProvinces.has(provinceId)
+function getDefaultStyle(provinceId: string, featured: Set<string>): L.PathOptions {
+  const isFeatured = featured.has(provinceId)
   return {
     fillColor: isFeatured ? '#e8e3dc' : '#e0ddd8',
     fillOpacity: 1,
@@ -54,10 +49,12 @@ const activeStyle: L.PathOptions = {
   opacity: 1,
 }
 
-// Stable style function — defined outside component to avoid new references
-function geoJsonStyleFn(feature: Feature | undefined): L.PathOptions {
-  const id = (feature?.properties as ProvinceProperties)?.id ?? ''
-  return getDefaultStyle(id)
+// Factory — returns a stable style function bound to the featured set
+function makeGeoJsonStyleFn(featured: Set<string>) {
+  return (feature: Feature | undefined): L.PathOptions => {
+    const id = (feature?.properties as ProvinceProperties)?.id ?? ''
+    return getDefaultStyle(id, featured)
+  }
 }
 
 const canvasRenderer = typeof window !== 'undefined' ? L.canvas({ padding: 0.5 }) : undefined
@@ -118,16 +115,20 @@ function MapClickHandler({ onMapClick }: { onMapClick: () => void }) {
 
 type ChinaMapProps = {
   locale: Locale
+  featuredProvinces?: string[]
   onProvinceClick?: (provinceId: string, provinceName: string) => void
   onProvinceHover?: (provinceId: string | null, provinceName: string) => void
   onDeselect?: () => void
 }
 
-function ChinaMap({ locale, onProvinceClick, onProvinceHover, onDeselect }: ChinaMapProps) {
+function ChinaMap({ locale, featuredProvinces: featuredList, onProvinceClick, onProvinceHover, onDeselect }: ChinaMapProps) {
   const [geojson, setGeojson] = useState<FeatureCollection | null>(null)
   const geoJsonRef = useRef<L.GeoJSON | null>(null)
   const activeLayerRef = useRef<L.Path | null>(null)
   const activeIdRef = useRef<string | null>(null)
+
+  const featured = useMemo(() => new Set(featuredList ?? []), [featuredList])
+  const geoJsonStyleFn = useMemo(() => makeGeoJsonStyleFn(featured), [featured])
 
   // Store callbacks in refs so GeoJSON event handlers always use the latest
   // without needing to re-bind
@@ -147,12 +148,12 @@ function ChinaMap({ locale, onProvinceClick, onProvinceHover, onDeselect }: Chin
 
   const resetSelection = useCallback(() => {
     if (activeLayerRef.current && activeIdRef.current) {
-      activeLayerRef.current.setStyle(getDefaultStyle(activeIdRef.current))
+      activeLayerRef.current.setStyle(getDefaultStyle(activeIdRef.current, featured))
     }
     activeLayerRef.current = null
     activeIdRef.current = null
     onDeselectRef.current?.()
-  }, [])
+  }, [featured])
 
   // onEachFeature only depends on locale — callbacks accessed via refs
   const onEachFeature = useCallback(
@@ -179,7 +180,7 @@ function ChinaMap({ locale, onProvinceClick, onProvinceHover, onDeselect }: Chin
         },
         mouseout: () => {
           if (activeIdRef.current !== props.id) {
-            pathLayer.setStyle(getDefaultStyle(props.id))
+            pathLayer.setStyle(getDefaultStyle(props.id, featured))
           }
           if (activeLayerRef.current) {
             activeLayerRef.current.bringToFront()
@@ -195,7 +196,7 @@ function ChinaMap({ locale, onProvinceClick, onProvinceHover, onDeselect }: Chin
           }
 
           if (activeLayerRef.current && activeIdRef.current) {
-            activeLayerRef.current.setStyle(getDefaultStyle(activeIdRef.current))
+            activeLayerRef.current.setStyle(getDefaultStyle(activeIdRef.current, featured))
           }
           pathLayer.setStyle(activeStyle)
           pathLayer.bringToFront()
@@ -205,7 +206,7 @@ function ChinaMap({ locale, onProvinceClick, onProvinceHover, onDeselect }: Chin
         },
       })
     },
-    [locale, resetSelection],
+    [locale, featured, resetSelection],
   )
 
   if (!geojson) {

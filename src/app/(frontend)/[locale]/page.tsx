@@ -98,16 +98,68 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     description: c.description || '',
   }))
 
-  // Map provinces
-  const mapProvinces = (homePage.mapProvinces || []).map((p: any) => ({
-    provinceId: p.provinceId || '',
-    description: p.description || '',
-    tours: p.tours || 0,
-    highlights: p.highlights || '',
-  }))
-
   const mapIntro = homePage.mapSection?.intro || ''
   const mapTagline = homePage.mapSection?.tagline || ''
+
+  // Build map data dynamically from Destinations + Tours
+  const [allDestinations, allTours] = await Promise.all([
+    payload.find({
+      collection: 'destinations',
+      where: { status: { equals: 'published' } },
+      locale: locale as 'es' | 'en' | 'zh',
+      limit: 100,
+    }),
+    payload.find({
+      collection: 'tours',
+      where: { status: { equals: 'published' } },
+      locale: locale as 'es' | 'en' | 'zh',
+      limit: 0,
+    }),
+  ])
+
+  // Count tours per destination ID
+  const tourCountByDestId: Record<string, number> = {}
+  for (const tour of allTours.docs as any[]) {
+    const dests = tour.destinations || []
+    for (const d of dests) {
+      const destId = typeof d === 'object' ? d.id : d
+      if (destId) {
+        tourCountByDestId[destId] = (tourCountByDestId[destId] || 0) + 1
+      }
+    }
+  }
+
+  // Aggregate by province
+  const provinceSlugMap: Record<string, string> = {}
+  const provinceDataMap: Record<string, { description: string; tours: number; highlights: string }> = {}
+  for (const d of allDestinations.docs as any[]) {
+    if (!d.province || !d.slug) continue
+    provinceSlugMap[d.province] = d.slug
+    const existing = provinceDataMap[d.province]
+    const destTours = tourCountByDestId[d.id] || 0
+    if (!existing) {
+      provinceDataMap[d.province] = {
+        description: d.shortDescription || '',
+        tours: destTours,
+        highlights: d.highlights || '',
+      }
+    } else {
+      existing.tours += destTours
+      // Merge highlights from multiple destinations in same province
+      if (d.highlights) {
+        existing.highlights = existing.highlights
+          ? `${existing.highlights} · ${d.highlights}`
+          : d.highlights
+      }
+    }
+  }
+
+  const mapProvinces = Object.entries(provinceDataMap).map(([provinceId, data]) => ({
+    provinceId,
+    description: data.description,
+    tours: data.tours,
+    highlights: data.highlights,
+  }))
 
   // Destinations for contact section dropdown
   const contactDestinations = destinationsResult.docs.map((d: any) => ({
@@ -119,7 +171,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     <>
       <Hero imageUrl={heroImageUrl} stats={stats} />
       <Marquee cities={marqueeCities} />
-      <MapSection provinces={mapProvinces} intro={mapIntro} tagline={mapTagline} />
+      <MapSection provinces={mapProvinces} provinceSlugMap={provinceSlugMap} intro={mapIntro} tagline={mapTagline} />
       <DestinationsSection destinations={destinationsResult.docs as any[]} />
       <PhotoStrip photos={photoStrip} />
       <ExpressSection deals={expressResult.docs as any[]} />

@@ -369,68 +369,6 @@ export async function seed() {
             'Cada viaje es único. Diseñamos itinerarios personalizados según tus intereses.',
         },
       ],
-      mapProvinces: [
-        {
-          provinceId: 'beijing',
-          tours: 5,
-          description: 'Capital milenaria del imperio chino',
-          highlights: 'Gran Muralla · Ciudad Prohibida · Templo del Cielo',
-        },
-        {
-          provinceId: 'shanghai',
-          tours: 3,
-          description: 'La metrópoli donde el futuro y el pasado conviven',
-          highlights: 'El Bund · Pudong · Jardín Yuyuan',
-        },
-        {
-          provinceId: 'guangxi',
-          tours: 4,
-          description: 'Paisajes kársticos eternos y ríos de jade',
-          highlights: 'Guilin · Río Li · Arrozales de Longji',
-        },
-        {
-          provinceId: 'yunnan',
-          tours: 6,
-          description: 'Terrazas de arroz, té y culturas fascinantes',
-          highlights: 'Lijiang · Dali · Shangri-La',
-        },
-        {
-          provinceId: 'sichuan',
-          tours: 4,
-          description: 'Pandas gigantes y cocina de fuego',
-          highlights: 'Chengdu · Jiuzhaigou · Leshan',
-        },
-        {
-          provinceId: 'tibet',
-          tours: 3,
-          description: 'El techo del mundo, espiritualidad pura',
-          highlights: 'Lhasa · Potala · Everest',
-        },
-        {
-          provinceId: 'shaanxi',
-          tours: 3,
-          description: 'Guerreros de terracota y la Ruta de la Seda',
-          highlights: "Xi'an · Ejército de Terracota · Muralla",
-        },
-        {
-          provinceId: 'hunan',
-          tours: 2,
-          description: 'Las montañas que inspiraron Avatar',
-          highlights: 'Zhangjiajie · Fenghuang',
-        },
-        {
-          provinceId: 'gansu',
-          tours: 2,
-          description: 'Grutas de Mogao y desierto de Gobi',
-          highlights: 'Dunhuang · Mogao · Zhangye Danxia',
-        },
-        {
-          provinceId: 'xinjiang',
-          tours: 2,
-          description: 'La nueva frontera y la Ruta de la Seda',
-          highlights: 'Kashgar · Turpán · Lago Kanas',
-        },
-      ],
       mapSection: {
         intro:
           'Somos la agencia que va más allá del turismo convencional. Te ayudamos a descubrir la China auténtica entre mercados callejeros, aldeas remotas y, sobre todo, a través de la gente que conocerás en el camino.',
@@ -474,68 +412,6 @@ export async function seed() {
             'Every trip is unique. We design personalized itineraries based on your interests.',
         },
       ],
-      mapProvinces: [
-        {
-          provinceId: 'beijing',
-          tours: 5,
-          description: 'Ancient capital of the Chinese empire',
-          highlights: 'Great Wall · Forbidden City · Temple of Heaven',
-        },
-        {
-          provinceId: 'shanghai',
-          tours: 3,
-          description: 'The metropolis where future meets past',
-          highlights: 'The Bund · Pudong · Yu Garden',
-        },
-        {
-          provinceId: 'guangxi',
-          tours: 4,
-          description: 'Eternal karst landscapes and jade rivers',
-          highlights: 'Guilin · Li River · Longji Rice Terraces',
-        },
-        {
-          provinceId: 'yunnan',
-          tours: 6,
-          description: 'Rice terraces, tea and vibrant cultures',
-          highlights: 'Lijiang · Dali · Shangri-La',
-        },
-        {
-          provinceId: 'sichuan',
-          tours: 4,
-          description: 'Giant pandas and fiery cuisine',
-          highlights: 'Chengdu · Jiuzhaigou · Leshan',
-        },
-        {
-          provinceId: 'tibet',
-          tours: 3,
-          description: 'Roof of the world, pure spirituality',
-          highlights: 'Lhasa · Potala · Everest',
-        },
-        {
-          provinceId: 'shaanxi',
-          tours: 3,
-          description: 'Terracotta warriors and the Silk Road',
-          highlights: "Xi'an · Terracotta Army · City Wall",
-        },
-        {
-          provinceId: 'hunan',
-          tours: 2,
-          description: 'The mountains that inspired Avatar',
-          highlights: 'Zhangjiajie · Fenghuang',
-        },
-        {
-          provinceId: 'gansu',
-          tours: 2,
-          description: 'Mogao Caves and Gobi Desert',
-          highlights: 'Dunhuang · Mogao · Zhangye Danxia',
-        },
-        {
-          provinceId: 'xinjiang',
-          tours: 2,
-          description: 'The new frontier and the Silk Road',
-          highlights: 'Kashgar · Turpan · Kanas Lake',
-        },
-      ],
       mapSection: {
         intro:
           'We are the travel company that punches through the tourist bubble to get to the real stories. We empower you to discover the China that lives amid the aromatic sizzle of street-side woks, in bustling city markets and far-flung mountain villages.',
@@ -575,68 +451,6 @@ export async function seed() {
           title: '定制行程',
           description:
             '每段旅程都独一无二，根据您的兴趣量身定制。',
-        },
-      ],
-      mapProvinces: [
-        {
-          provinceId: 'beijing',
-          tours: 5,
-          description: '千年帝都',
-          highlights: '长城 · 故宫 · 天坛',
-        },
-        {
-          provinceId: 'shanghai',
-          tours: 3,
-          description: '过去与未来交汇的大都市',
-          highlights: '外滩 · 浦东 · 豫园',
-        },
-        {
-          provinceId: 'guangxi',
-          tours: 4,
-          description: '千古喀斯特与碧玉江河',
-          highlights: '桂林 · 漓江 · 龙脊梯田',
-        },
-        {
-          provinceId: 'yunnan',
-          tours: 6,
-          description: '梯田茶园与缤纷民族',
-          highlights: '丽江 · 大理 · 香格里拉',
-        },
-        {
-          provinceId: 'sichuan',
-          tours: 4,
-          description: '大熊猫与火辣美食',
-          highlights: '成都 · 九寨沟 · 乐山',
-        },
-        {
-          provinceId: 'tibet',
-          tours: 3,
-          description: '世界屋脊，心灵净土',
-          highlights: '拉萨 · 布达拉宫 · 珠峰',
-        },
-        {
-          provinceId: 'shaanxi',
-          tours: 3,
-          description: '兵马俑与丝绸之路',
-          highlights: '西安 · 兵马俑 · 古城墙',
-        },
-        {
-          provinceId: 'hunan',
-          tours: 2,
-          description: '阿凡达取景地',
-          highlights: '张家界 · 凤凰古城',
-        },
-        {
-          provinceId: 'gansu',
-          tours: 2,
-          description: '莫高窟与戈壁沙漠',
-          highlights: '敦煌 · 莫高窟 · 张掖丹霞',
-        },
-        {
-          provinceId: 'xinjiang',
-          tours: 2,
-          description: '新边疆与丝绸之路',
-          highlights: '喀什 · 吐鲁番 · 喀纳斯',
         },
       ],
       mapSection: {

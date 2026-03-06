@@ -124,6 +124,14 @@
     "backToTours": "All tours",
     "relatedTours": "You may also like"
   },
+  "mapSection": {
+    "tours": "tours",
+    "clickHint": "Click to explore",
+    "clickHintCustom": "Click to design your trip",
+    "noTours": "No fixed itineraries yet",
+    "customSuggestion": "We can design a tailor-made trip for you!",
+    "customCta": "Design your custom trip"
+  },
   "footer": {
     "copyright": "© 2025 · Based in Spain · Partners across China"
   }

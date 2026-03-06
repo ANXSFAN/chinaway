@@ -895,15 +895,6 @@ export interface HomePage {
         id?: string | null;
       }[]
     | null;
-  mapProvinces?:
-    | {
-        provinceId: string;
-        description?: string | null;
-        tours?: number | null;
-        highlights?: string | null;
-        id?: string | null;
-      }[]
-    | null;
   mapSection?: {
     intro?: string | null;
     tagline?: string | null;
@@ -1013,15 +1004,6 @@ export interface HomePageSelect<T extends boolean = true> {
         iconType?: T;
         title?: T;
         description?: T;
-        id?: T;
-      };
-  mapProvinces?:
-    | T
-    | {
-        provinceId?: T;
-        description?: T;
-        tours?: T;
-        highlights?: T;
         id?: T;
       };
   mapSection?:

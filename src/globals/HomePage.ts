@@ -69,18 +69,6 @@ export const HomePage: GlobalConfig = {
         { name: 'description', label: { en: 'Description', zh: '描述', es: 'Descripción' }, type: 'textarea', localized: true },
       ],
     },
-    // Map province details
-    {
-      name: 'mapProvinces',
-      label: { en: 'Map Provinces', zh: '地图省份信息', es: 'Provincias del mapa' },
-      type: 'array',
-      fields: [
-        { name: 'provinceId', label: { en: 'Province ID', zh: '省份ID', es: 'ID de provincia' }, type: 'text', required: true },
-        { name: 'description', label: { en: 'Description', zh: '描述', es: 'Descripción' }, type: 'text', localized: true },
-        { name: 'tours', label: { en: 'Tour Count', zh: '行程数', es: 'Número de tours' }, type: 'number' },
-        { name: 'highlights', label: { en: 'Highlights', zh: '亮点', es: 'Destacados' }, type: 'text', localized: true },
-      ],
-    },
     // Map section intro text
     {
       type: 'group',

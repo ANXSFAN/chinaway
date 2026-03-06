@@ -124,6 +124,14 @@
     "backToTours": "Todos los viajes",
     "relatedTours": "También te puede interesar"
   },
+  "mapSection": {
+    "tours": "itinerarios",
+    "clickHint": "Clic para explorar",
+    "clickHintCustom": "Clic para diseñar tu viaje",
+    "noTours": "Aún no hay itinerarios fijos",
+    "customSuggestion": "¡Podemos diseñar un viaje a medida para ti!",
+    "customCta": "Diseña tu viaje a medida"
+  },
   "footer": {
     "copyright": "© 2025 · Con sede en España · Socios en toda China"
   }

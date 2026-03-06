@@ -124,6 +124,14 @@
     "backToTours": "所有行程",
     "relatedTours": "您可能还喜欢"
   },
+  "mapSection": {
+    "tours": "条行程",
+    "clickHint": "点击探索",
+    "clickHintCustom": "点击定制专属旅程",
+    "noTours": "暂无固定行程",
+    "customSuggestion": "我们可以为您量身定制旅程！",
+    "customCta": "定制您的旅程"
+  },
   "footer": {
     "copyright": "© 2025 · 总部西班牙 · 合作伙伴遍布中国"
   }
