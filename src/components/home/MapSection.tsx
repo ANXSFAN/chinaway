@@ -43,6 +43,7 @@ export function MapSection({ provinces, provinceSlugMap, intro, tagline }: Props
   const [activeProvince, setActiveProvince] = useState<ProvinceInfo | null>(null)
   const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null)
   const [isMobile, setIsMobile] = useState(false)
+  const [mapActive, setMapActive] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
 
   // Detect touch device / narrow screen
@@ -54,6 +55,25 @@ export function MapSection({ provinces, provinceSlugMap, intro, tagline }: Props
     window.addEventListener('resize', check)
     return () => window.removeEventListener('resize', check)
   }, [])
+
+  // Deactivate map on scroll or tap outside
+  useEffect(() => {
+    if (!isMobile || !mapActive) return
+    const lock = () => setMapActive(false)
+    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        lock()
+      }
+    }
+    window.addEventListener('scroll', lock, { passive: true })
+    document.addEventListener('touchstart', handleClickOutside)
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      window.removeEventListener('scroll', lock)
+      document.removeEventListener('touchstart', handleClickOutside)
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isMobile, mapActive])
 
   // Build lookup from props
   const provinceDetailsMap: Record<string, { description: string; tours: number; highlights: string }> = {}
@@ -149,7 +169,7 @@ export function MapSection({ provinces, provinceSlugMap, intro, tagline }: Props
         onMouseLeave={handleMouseLeave}
       >
         {/* Map inner — clips the map itself; shorter on mobile so full China is visible */}
-        <div className="overflow-hidden aspect-[1/1] sm:aspect-[1.3/1]" style={{ contain: 'layout paint', willChange: 'transform' }}>
+        <div className="relative overflow-hidden aspect-[1/1] sm:aspect-[1.3/1]" style={{ contain: 'layout paint', willChange: 'transform' }}>
           <ChinaMap
             locale={locale}
             featuredProvinces={featuredProvinceIds}
@@ -157,6 +177,17 @@ export function MapSection({ provinces, provinceSlugMap, intro, tagline }: Props
             onProvinceHover={handleProvinceHover}
             onDeselect={handleDeselect}
           />
+          {/* Mobile: overlay to prevent map from capturing scroll; tap to activate */}
+          {isMobile && !mapActive && (
+            <div
+              className="absolute inset-0 z-10 flex items-center justify-center cursor-pointer"
+              onClick={() => setMapActive(true)}
+            >
+              <span className="bg-black/50 text-white font-dm text-xs tracking-[.08em] px-4 py-2 rounded-full backdrop-blur-sm">
+                {locale === 'zh' ? '点击探索中国' : locale === 'es' ? 'Toca para explorar China' : 'Tap to explore China'}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Desktop: Floating province card — follows mouse, outside overflow-hidden */}

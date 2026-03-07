@@ -54,8 +54,9 @@ function TrustIcon({ type }: { type: string }) {
 export function WhyUsSection({ cards, stats }: Props) {
   const t = useTranslations()
 
-  // Fallback to i18n keys if no cards from CMS
-  const displayCards = cards.length > 0
+  // Fallback to i18n keys if no cards from CMS or if CMS content is empty (missing locale)
+  const hasCmsContent = cards.length > 0 && cards.some((c) => c.title?.trim())
+  const displayCards = hasCmsContent
     ? cards
     : (['visa', 'guide', 'team', 'custom'] as const).map((key) => ({
         iconType: key,

@@ -88,7 +88,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       (homePage.banner?.image as { url?: string } | null)?.url ||
       'https://picsum.photos/id/1022/1800/900',
     location: homePage.banner?.location || 'Zhangjiajie · 张家界',
-    quote: homePage.banner?.quote || 'Las montañas que inspiraron Avatar',
+    quote: homePage.banner?.quote || (locale === 'zh' ? '启发了《阿凡达》的群山' : locale === 'en' ? 'The mountains that inspired Avatar' : 'Las montañas que inspiraron Avatar'),
   }
 
   // Why us cards

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { useTranslations } from 'next-intl'
 import { Link, usePathname } from '@/i18n/navigation'
 
@@ -42,7 +43,7 @@ export function Navbar({ locale }: { locale: string }) {
     { label: t('contact'), href: '/contact' },
   ]
 
-  return (
+  return (<>
     <header
       className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between transition-all duration-350 ${
         scrolled
@@ -146,48 +147,50 @@ export function Navbar({ locale }: { locale: string }) {
         </button>
       </div>
 
-      {/* Mobile menu — right-aligned panel */}
-      {menuOpen && (
-        <div
-          className="fixed inset-0 z-50 lg:hidden flex touch-none"
-          onTouchMove={(e) => e.preventDefault()}
-        >
-          {/* Left blank area — tap or swipe to close */}
-          <div
-            className="flex-shrink-0 w-[30%]"
-            onClick={() => setMenuOpen(false)}
-            onTouchStart={() => setMenuOpen(false)}
-          />
-          {/* Right panel */}
-          <div className="flex-1 bg-white/30 backdrop-blur-xl flex flex-col justify-center items-center relative overflow-hidden -mt-20">
-            {/* Close button */}
-            <button
-              className="absolute top-5 right-6 p-2"
-              onClick={() => setMenuOpen(false)}
-              aria-label="Close menu"
-            >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="1.5" strokeLinecap="round">
-                <path d="M18 6L6 18M6 6l12 12" />
-              </svg>
-            </button>
-
-            <nav className="flex flex-col items-center w-full px-8">
-              {navItems.map((item, i) => (
-                <div key={item.href} className="w-full flex flex-col items-center">
-                  {i > 0 && <div className="w-12 h-px bg-black/10" />}
-                  <Link
-                    href={item.href}
-                    className="font-playfair text-[28px] font-bold tracking-[.02em] text-black/80 hover:text-black transition-colors py-3"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                </div>
-              ))}
-            </nav>
-          </div>
-        </div>
-      )}
     </header>
-  )
+
+    {/* Mobile menu — rendered via portal to avoid header clipping */}
+    {menuOpen && createPortal(
+      <div
+        className="fixed inset-0 z-[999] lg:hidden flex touch-none"
+        onTouchMove={(e) => e.preventDefault()}
+      >
+        {/* Left backdrop — tap or swipe to close */}
+        <div
+          className="flex-shrink-0 w-[30%] bg-black/20"
+          onClick={() => setMenuOpen(false)}
+          onTouchStart={() => setMenuOpen(false)}
+        />
+        {/* Right panel */}
+        <div className="flex-1 bg-white/80 backdrop-blur-xl flex flex-col justify-center items-center relative overflow-hidden pb-20">
+          {/* Close button */}
+          <button
+            className="absolute top-5 right-6 p-2 z-10"
+            onClick={() => setMenuOpen(false)}
+            aria-label="Close menu"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="1.5" strokeLinecap="round">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
+
+          <nav className="flex flex-col items-center w-full px-8">
+            {navItems.map((item, i) => (
+              <div key={item.href} className="w-full flex flex-col items-center">
+                {i > 0 && <div className="w-12 h-px bg-black/10" />}
+                <Link
+                  href={item.href}
+                  className="font-dm text-[13px] font-medium tracking-[.15em] uppercase text-black/60 hover:text-black transition-colors py-3"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              </div>
+            ))}
+          </nav>
+        </div>
+      </div>,
+      document.body
+    )}
+  </>)
 }
