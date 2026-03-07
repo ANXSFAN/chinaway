@@ -5,7 +5,7 @@ import { SectionLabel } from '@/components/ui/SectionLabel'
 import { Link } from '@/i18n/navigation'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { BookingButton } from '@/components/booking/BookingButton'
+import { TourSidebar } from '@/components/booking/TourSidebar'
 
 /** Extract plain text from Lexical richText JSON */
 function extractText(richText: any): string {
@@ -148,74 +148,20 @@ export default async function TourDetailPage({ params }: { params: Promise<{ loc
             </div>
 
             {/* Sidebar - Price & Booking */}
-            <div>
-              <div className="sticky top-28 bg-cream p-8 rounded-sm">
-                <div className="font-dm text-[10px] text-gray uppercase tracking-[.08em]">{t('tours.from')}</div>
-                <div className="font-playfair text-[42px] font-bold text-red leading-none mb-1">
-                  {priceDisplay}€
-                </div>
-                <div className="font-dm text-sm text-gray mb-6">
-                  {locale === 'es' ? 'por persona' : locale === 'en' ? 'per person' : '每人'}
-                </div>
-
-                <div className="space-y-3 mb-6 pb-6 border-b border-[#ddd]">
-                  <div className="flex justify-between font-dm text-sm">
-                    <span className="text-gray">{locale === 'es' ? 'Duración' : locale === 'en' ? 'Duration' : '天数'}</span>
-                    <span className="font-medium">{tour.days} {t('tours.days')}</span>
-                  </div>
-                  {tour.cities && (
-                    <div className="flex justify-between font-dm text-sm">
-                      <span className="text-gray">{locale === 'es' ? 'Ruta' : locale === 'en' ? 'Route' : '路线'}</span>
-                      <span className="font-medium text-right max-w-[160px]">{tour.cities}</span>
-                    </div>
-                  )}
-                  <div className="flex justify-between font-dm text-sm">
-                    <span className="text-gray">{t('tourDetail.deposit')}</span>
-                    <span className="font-medium">{depositAmount}€</span>
-                  </div>
-                </div>
-
-                {/* Departures */}
-                {tour.departures && tour.departures.length > 0 && (
-                  <div className="mb-6">
-                    <h4 className="font-dm text-xs font-medium text-gray uppercase tracking-[.08em] mb-3">
-                      {t('tourDetail.departures')}
-                    </h4>
-                    <div className="space-y-2">
-                      {tour.departures.map((dep: any) => {
-                        const spotsLeft = (dep.spotsTotal || 0) - (dep.spotsBooked || 0)
-                        const dateDisplay = new Date(dep.date).toLocaleDateString(
-                          locale === 'zh' ? 'zh-CN' : locale === 'en' ? 'en-GB' : 'es-ES',
-                          { day: 'numeric', month: 'short', year: 'numeric' }
-                        )
-                        return (
-                          <div key={dep.id || dep.date} className="flex justify-between font-dm text-sm">
-                            <span>{dateDisplay}</span>
-                            <span className={spotsLeft <= 5 ? 'text-red font-medium' : 'text-gray'}>
-                              {spotsLeft} {locale === 'es' ? 'plazas' : locale === 'en' ? 'spots' : '余位'}
-                            </span>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </div>
-                )}
-
-                <BookingButton
-                  tourId={tour.id}
-                  tourTitle={tour.title || ''}
-                  departureDate={tour.departures?.[0]?.date || ''}
-                  depositAmount={depositAmount}
-                  locale={locale}
-                  className="w-full font-dm text-xs font-medium tracking-[.12em] uppercase py-4 bg-red text-white hover:bg-red-dark hover:-translate-y-px hover:shadow-[0_8px_24px_rgba(208,2,27,.3)] transition-all duration-250"
-                >
-                  {t('tourDetail.bookNow')}
-                </BookingButton>
-                <button className="w-full mt-3 font-dm text-xs font-medium tracking-[.1em] uppercase py-3 bg-transparent text-black border-[1.5px] border-[#ccc] hover:border-black transition-all duration-250">
-                  {t('hero.cta2')}
-                </button>
-              </div>
-            </div>
+            <TourSidebar
+              tourId={tour.id}
+              tourTitle={tour.title || ''}
+              price={priceDisplay}
+              days={tour.days}
+              cities={tour.cities || ''}
+              depositAmount={depositAmount}
+              departures={(tour.departures || []).map((dep: any) => ({
+                date: dep.date,
+                spotsTotal: dep.spotsTotal || 0,
+                spotsBooked: dep.spotsBooked || 0,
+              }))}
+              locale={locale}
+            />
           </div>
         </div>
       </section>

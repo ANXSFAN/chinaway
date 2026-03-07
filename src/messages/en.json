@@ -117,6 +117,10 @@
     "included": "Included",
     "excluded": "Not included",
     "price": "Price",
+    "perPerson": "per person",
+    "duration": "Duration",
+    "route": "Route",
+    "spots": "spots",
     "deposit": "Deposit to reserve",
     "bookNow": "Book now",
     "departures": "Departures",
@@ -132,7 +136,19 @@
     "customSuggestion": "We can design a tailor-made trip for you!",
     "customCta": "Design your custom trip"
   },
+  "error": {
+    "title": "Error",
+    "message": "Something went wrong",
+    "retry": "Retry"
+  },
+  "notFound": {
+    "message": "Page not found",
+    "back": "Back to home"
+  },
   "footer": {
-    "copyright": "© 2025 · Based in Spain · Partners across China"
+    "copyright": "© 2025 · Based in Spain · Partners across China",
+    "privacy": "Privacy",
+    "cookies": "Cookies",
+    "terms": "Terms"
   }
 }

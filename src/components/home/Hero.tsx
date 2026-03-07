@@ -26,6 +26,8 @@ export function Hero({ imageUrl, stats }: HeroProps) {
       <img
         src={imageUrl}
         alt="China landscape"
+        loading="eager"
+        fetchPriority="high"
         className="absolute inset-0 w-full h-full object-cover object-[center_40%]"
       />
       {/* Gradient overlays */}

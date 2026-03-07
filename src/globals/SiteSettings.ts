@@ -13,8 +13,8 @@ export const SiteSettings: GlobalConfig = {
       label: { en: 'Company Info', zh: '公司信息', es: 'Información de la empresa' },
       fields: [
         { name: 'name', label: { en: 'Company Name', zh: '公司名称', es: 'Nombre de la empresa' }, type: 'text', defaultValue: 'ChinaWay Travel S.L.' },
-        { name: 'cif', label: { en: 'CIF', zh: '税号', es: 'CIF' }, type: 'text', defaultValue: 'B-12345678' },
-        { name: 'address', label: { en: 'Address', zh: '地址', es: 'Dirección' }, type: 'text', defaultValue: 'Madrid, España' },
+        { name: 'cif', label: { en: 'CIF', zh: '税号', es: 'CIF' }, type: 'text' },
+        { name: 'address', label: { en: 'Address', zh: '地址', es: 'Dirección' }, type: 'text' },
         { name: 'foundedYear', label: { en: 'Founded Year', zh: '成立年份', es: 'Año de fundación' }, type: 'number', defaultValue: 2018 },
       ],
     },
@@ -23,8 +23,8 @@ export const SiteSettings: GlobalConfig = {
       name: 'contact',
       label: { en: 'Contact Info', zh: '联系方式', es: 'Información de contacto' },
       fields: [
-        { name: 'whatsapp', label: { en: 'WhatsApp', zh: 'WhatsApp', es: 'WhatsApp' }, type: 'text', defaultValue: '+34 600 000 000' },
-        { name: 'wechat', label: { en: 'WeChat ID', zh: '微信号', es: 'WeChat ID' }, type: 'text', defaultValue: 'ChinaWayTravel' },
+        { name: 'whatsapp', label: { en: 'WhatsApp', zh: 'WhatsApp', es: 'WhatsApp' }, type: 'text' },
+        { name: 'wechat', label: { en: 'WeChat ID', zh: '微信号', es: 'WeChat ID' }, type: 'text' },
         { name: 'email', label: { en: 'Email', zh: '邮箱', es: 'Email' }, type: 'email', defaultValue: 'info@chinaway.es' },
         { name: 'privacyEmail', label: { en: 'Privacy Email', zh: '隐私邮箱', es: 'Email de privacidad' }, type: 'email', defaultValue: 'privacy@chinaway.es' },
       ],

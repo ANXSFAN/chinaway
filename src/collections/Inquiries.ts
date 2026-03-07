@@ -13,6 +13,8 @@ export const Inquiries: CollectionConfig = {
   access: {
     read: ({ req }) => !!req.user,
     create: () => true,
+    update: ({ req }) => !!req.user,
+    delete: ({ req }) => !!req.user,
   },
   fields: [
     {
@@ -53,10 +55,10 @@ export const Inquiries: CollectionConfig = {
       label: { en: 'Budget', zh: '预算', es: 'Presupuesto' },
       type: 'select',
       options: [
-        { label: '< 2.000€', value: '<2000' },
-        { label: '2.000€ - 4.000€', value: '2000-4000' },
-        { label: '4.000€ - 6.000€', value: '4000-6000' },
-        { label: '> 6.000€', value: '>6000' },
+        { label: { en: '< €2,000', zh: '< 2,000€', es: '< 2.000€' }, value: '<2000' },
+        { label: { en: '€2,000 – €4,000', zh: '2,000€ – 4,000€', es: '2.000€ – 4.000€' }, value: '2000-4000' },
+        { label: { en: '€4,000 – €6,000', zh: '4,000€ – 6,000€', es: '4.000€ – 6.000€' }, value: '4000-6000' },
+        { label: { en: '> €6,000', zh: '> 6,000€', es: '> 6.000€' }, value: '>6000' },
       ],
     },
     {

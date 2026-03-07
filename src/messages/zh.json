@@ -117,6 +117,10 @@
     "included": "包含项目",
     "excluded": "不包含项目",
     "price": "价格",
+    "perPerson": "每人",
+    "duration": "天数",
+    "route": "路线",
+    "spots": "余位",
     "deposit": "预订定金",
     "bookNow": "立即预订",
     "departures": "出发日期",
@@ -132,7 +136,19 @@
     "customSuggestion": "我们可以为您量身定制旅程！",
     "customCta": "定制您的旅程"
   },
+  "error": {
+    "title": "错误",
+    "message": "出了点问题",
+    "retry": "重试"
+  },
+  "notFound": {
+    "message": "页面未找到",
+    "back": "返回首页"
+  },
   "footer": {
-    "copyright": "© 2025 · 总部西班牙 · 合作伙伴遍布中国"
+    "copyright": "© 2025 · 总部西班牙 · 合作伙伴遍布中国",
+    "privacy": "隐私政策",
+    "cookies": "Cookie",
+    "terms": "服务条款"
   }
 }

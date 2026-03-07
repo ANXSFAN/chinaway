@@ -12,6 +12,9 @@ export const Reviews: CollectionConfig = {
   },
   access: {
     read: () => true,
+    create: ({ req }) => !!req.user,
+    update: ({ req }) => !!req.user,
+    delete: ({ req }) => !!req.user,
   },
   fields: [
     {
@@ -61,7 +64,7 @@ export const Reviews: CollectionConfig = {
         { label: { en: 'Draft', zh: '草稿', es: 'Borrador' }, value: 'draft' },
         { label: { en: 'Published', zh: '已发布', es: 'Publicado' }, value: 'published' },
       ],
-      defaultValue: 'published',
+      defaultValue: 'draft',
       required: true,
       admin: { position: 'sidebar' },
     },

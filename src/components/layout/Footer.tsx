@@ -1,29 +1,16 @@
 'use client'
 
-import { useTranslations, useLocale } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
-
-const legalLinks = {
-  es: [
-    { href: '/legal/privacy', label: 'Privacidad' },
-    { href: '/legal/cookies', label: 'Cookies' },
-    { href: '/legal/terms', label: 'Términos' },
-  ],
-  en: [
-    { href: '/legal/privacy', label: 'Privacy' },
-    { href: '/legal/cookies', label: 'Cookies' },
-    { href: '/legal/terms', label: 'Terms' },
-  ],
-  zh: [
-    { href: '/legal/privacy', label: '隐私政策' },
-    { href: '/legal/cookies', label: 'Cookie' },
-    { href: '/legal/terms', label: '服务条款' },
-  ],
-} as const
 
 export function Footer() {
   const t = useTranslations('footer')
-  const locale = useLocale() as 'es' | 'en' | 'zh'
+
+  const legalLinks = [
+    { href: '/legal/privacy', label: t('privacy') },
+    { href: '/legal/cookies', label: t('cookies') },
+    { href: '/legal/terms', label: t('terms') },
+  ] as const
 
   return (
     <footer className="border-t border-[#e8e8e8]">
@@ -63,7 +50,7 @@ export function Footer() {
       </div>
       {/* Legal links */}
       <div className="border-t border-[#f0f0f0] py-4 px-[6%] flex justify-center gap-6">
-        {legalLinks[locale].map((link) => (
+        {legalLinks.map((link) => (
           <Link
             key={link.href}
             href={link.href}

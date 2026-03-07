@@ -29,6 +29,16 @@ export async function POST(req: NextRequest) {
       if (tourId) {
         const payload = await getPayload({ config })
 
+        // Idempotency check: skip if booking already exists for this session
+        const existing = await payload.find({
+          collection: 'bookings',
+          where: { stripeSessionId: { equals: session.id } },
+          limit: 1,
+        })
+        if (existing.docs.length > 0) {
+          return NextResponse.json({ received: true, note: 'already processed' })
+        }
+
         // Create booking record
         const tourIdNum = Number(tourId)
         await payload.create({

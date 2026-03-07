@@ -19,7 +19,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const { locale } = await params
   const payload = await getPayload({ config })
 
-  // Fetch all data in parallel
+  // Fetch all data in a single parallel batch
+  const loc = locale as 'es' | 'en' | 'zh'
   const [
     destinationsResult,
     toursResult,
@@ -27,34 +28,48 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     reviewsResult,
     homePage,
     siteSettings,
+    allDestinations,
+    allTours,
   ] = await Promise.all([
     payload.find({
       collection: 'destinations',
       where: { status: { equals: 'published' }, featured: { equals: true } },
-      locale: locale as 'es' | 'en' | 'zh',
+      locale: loc,
       limit: 6,
     }),
     payload.find({
       collection: 'tours',
       where: { status: { equals: 'published' }, isExpress: { not_equals: true } },
-      locale: locale as 'es' | 'en' | 'zh',
+      locale: loc,
       limit: 3,
       sort: '-createdAt',
     }),
     payload.find({
       collection: 'tours',
       where: { status: { equals: 'published' }, isExpress: { equals: true } },
-      locale: locale as 'es' | 'en' | 'zh',
+      locale: loc,
       limit: 10,
     }),
     payload.find({
       collection: 'reviews',
       where: { status: { equals: 'published' } },
-      locale: locale as 'es' | 'en' | 'zh',
+      locale: loc,
       limit: 10,
     }),
-    payload.findGlobal({ slug: 'home-page', locale: locale as 'es' | 'en' | 'zh' }),
+    payload.findGlobal({ slug: 'home-page', locale: loc }),
     payload.findGlobal({ slug: 'site-settings' }),
+    payload.find({
+      collection: 'destinations',
+      where: { status: { equals: 'published' } },
+      locale: loc,
+      limit: 100,
+    }),
+    payload.find({
+      collection: 'tours',
+      where: { status: { equals: 'published' } },
+      locale: loc,
+      limit: 0,
+    }),
   ])
 
   // Extract stats from site settings
@@ -102,21 +117,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const mapTagline = homePage.mapSection?.tagline || ''
 
   // Build map data dynamically from Destinations + Tours
-  const [allDestinations, allTours] = await Promise.all([
-    payload.find({
-      collection: 'destinations',
-      where: { status: { equals: 'published' } },
-      locale: locale as 'es' | 'en' | 'zh',
-      limit: 100,
-    }),
-    payload.find({
-      collection: 'tours',
-      where: { status: { equals: 'published' } },
-      locale: locale as 'es' | 'en' | 'zh',
-      limit: 0,
-    }),
-  ])
-
   // Count tours per destination ID
   const tourCountByDestId: Record<string, number> = {}
   for (const tour of allTours.docs as any[]) {

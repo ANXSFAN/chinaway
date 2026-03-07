@@ -13,6 +13,8 @@ export const Bookings: CollectionConfig = {
   access: {
     read: ({ req }) => !!req.user,
     create: () => true,
+    update: ({ req }) => !!req.user,
+    delete: ({ req }) => !!req.user,
   },
   fields: [
     {
@@ -49,6 +51,7 @@ export const Bookings: CollectionConfig = {
       name: 'stripeSessionId',
       label: { en: 'Stripe Session ID', zh: 'Stripe 会话 ID', es: 'ID de sesión Stripe' },
       type: 'text',
+      unique: true,
       admin: {
         position: 'sidebar',
       },

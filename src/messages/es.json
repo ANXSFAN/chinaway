@@ -117,6 +117,10 @@
     "included": "Incluido",
     "excluded": "No incluido",
     "price": "Precio",
+    "perPerson": "por persona",
+    "duration": "Duración",
+    "route": "Ruta",
+    "spots": "plazas",
     "deposit": "Depósito para reservar",
     "bookNow": "Reservar ahora",
     "departures": "Salidas",
@@ -132,7 +136,19 @@
     "customSuggestion": "¡Podemos diseñar un viaje a medida para ti!",
     "customCta": "Diseña tu viaje a medida"
   },
+  "error": {
+    "title": "Error",
+    "message": "Algo salió mal",
+    "retry": "Reintentar"
+  },
+  "notFound": {
+    "message": "Página no encontrada",
+    "back": "Volver al inicio"
+  },
   "footer": {
-    "copyright": "© 2025 · Con sede en España · Socios en toda China"
+    "copyright": "© 2025 · Con sede en España · Socios en toda China",
+    "privacy": "Privacidad",
+    "cookies": "Cookies",
+    "terms": "Términos"
   }
 }

@@ -25,6 +25,7 @@ const labels = {
     error: 'Error al procesar. Inténtalo de nuevo.',
     privacy: 'Al continuar, aceptas nuestra',
     privacyLink: 'política de privacidad',
+    close: 'Cerrar',
   },
   en: {
     title: 'Book Now',
@@ -37,6 +38,7 @@ const labels = {
     error: 'Processing error. Please try again.',
     privacy: 'By continuing, you accept our',
     privacyLink: 'privacy policy',
+    close: 'Close',
   },
   zh: {
     title: '预订',
@@ -49,6 +51,7 @@ const labels = {
     error: '处理出错，请重试。',
     privacy: '继续即表示您接受我们的',
     privacyLink: '隐私政策',
+    close: '关闭',
   },
 }
 
@@ -81,12 +84,10 @@ export function BookingButton({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           tourId,
-          tourTitle,
           departureDate,
           customerName: name,
           customerEmail: email,
           customerPhone: phone || undefined,
-          depositAmount,
           locale,
         }),
       })
@@ -112,6 +113,9 @@ export function BookingButton({
       {open && (
         <div
           className="fixed inset-0 z-[300] flex items-center justify-center p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="booking-dialog-title"
           onClick={() => setOpen(false)}
         >
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
@@ -121,6 +125,7 @@ export function BookingButton({
           >
             <button
               onClick={() => setOpen(false)}
+              aria-label={t.close}
               className="absolute top-4 right-4 text-gray hover:text-black transition-colors"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -128,7 +133,7 @@ export function BookingButton({
               </svg>
             </button>
 
-            <h3 className="font-playfair text-2xl font-bold mb-2">{t.title}</h3>
+            <h3 id="booking-dialog-title" className="font-playfair text-2xl font-bold mb-2">{t.title}</h3>
             <p className="font-dm text-sm text-gray mb-6">
               {tourTitle} · {t.deposit}: {depositAmount}€
             </p>
@@ -137,17 +142,21 @@ export function BookingButton({
               <input
                 type="text"
                 required
+                aria-required="true"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder={t.name}
+                aria-label={t.name}
                 className="w-full py-3 px-4 border-[1.5px] border-[#e0e0e0] rounded-sm font-dm text-sm outline-none focus:border-red transition-colors"
               />
               <input
                 type="email"
                 required
+                aria-required="true"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={t.email}
+                aria-label={t.email}
                 className="w-full py-3 px-4 border-[1.5px] border-[#e0e0e0] rounded-sm font-dm text-sm outline-none focus:border-red transition-colors"
               />
               <input
@@ -155,10 +164,11 @@ export function BookingButton({
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder={t.phone}
+                aria-label={t.phone}
                 className="w-full py-3 px-4 border-[1.5px] border-[#e0e0e0] rounded-sm font-dm text-sm outline-none focus:border-red transition-colors"
               />
 
-              {error && <p className="font-dm text-sm text-red">{error}</p>}
+              {error && <p role="alert" className="font-dm text-sm text-red">{error}</p>}
 
               <p className="font-dm text-[11px] text-gray">
                 {t.privacy}{' '}
