@@ -22,6 +22,14 @@ export function Navbar({ locale }: { locale: string }) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = 'hidden'
+      return () => { document.body.style.overflow = '' }
+    }
+  }, [menuOpen])
+
   const navItems = [
     { label: t('home'), href: '/' },
     { label: t('destinations'), href: '/destinations' },
@@ -80,8 +88,8 @@ export function Navbar({ locale }: { locale: string }) {
         ))}
       </nav>
 
-      {/* Language Switcher */}
-      <div className="hidden md:flex gap-1.5">
+      {/* Desktop Language Switcher */}
+      <div className="hidden lg:flex gap-1.5">
         {localeLabels.map(({ code, label }) => (
           <Link
             key={code}
@@ -102,47 +110,81 @@ export function Navbar({ locale }: { locale: string }) {
         ))}
       </div>
 
-      {/* Mobile menu button */}
-      <button
-        className="lg:hidden flex flex-col gap-1.5 p-2"
-        onClick={() => setMenuOpen(!menuOpen)}
-        aria-label="Toggle menu"
-      >
-        {[0, 1, 2].map((i) => (
-          <span
-            key={i}
-            className={`block w-5 h-[1.5px] transition-colors ${scrolled ? 'bg-black' : 'bg-white'}`}
-          />
-        ))}
-      </button>
-
-      {/* Mobile menu */}
-      {menuOpen && (
-        <div className="absolute top-full left-0 right-0 bg-white shadow-lg lg:hidden p-6 flex flex-col gap-4">
-          {navItems.map((item) => (
+      {/* Mobile: Language switcher + hamburger */}
+      <div className="lg:hidden flex items-center gap-2">
+        <div className="flex gap-1">
+          {localeLabels.map(({ code, label }) => (
             <Link
-              key={item.href}
-              href={item.href}
-              className="font-dm text-sm tracking-[.08em] uppercase text-black/70 hover:text-black"
-              onClick={() => setMenuOpen(false)}
+              key={code}
+              href={pathname}
+              locale={code}
+              className={`px-2 py-0.5 rounded-full font-dm text-[10px] font-medium tracking-[.04em] transition-all duration-200 ${
+                scrolled
+                  ? locale === code
+                    ? 'text-red bg-red/8'
+                    : 'text-gray/60'
+                  : locale === code
+                    ? 'text-white bg-white/15'
+                    : 'text-white/50'
+              }`}
             >
-              {item.label}
+              {label}
             </Link>
           ))}
-          <div className="flex gap-2 pt-4 border-t border-gray/20">
-            {localeLabels.map(({ code, label }) => (
-              <Link
-                key={code}
-                href={pathname}
-                locale={code}
-                className={`px-3 py-1 border-[1.5px] rounded-full font-dm text-[11px] font-medium ${
-                  locale === code ? 'border-red text-red' : 'border-transparent text-gray'
-                }`}
-                onClick={() => setMenuOpen(false)}
-              >
-                {label}
-              </Link>
-            ))}
+        </div>
+        <button
+          className="flex flex-col gap-1.5 p-2"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Toggle menu"
+        >
+          {[0, 1, 2].map((i) => (
+            <span
+              key={i}
+              className={`block w-5 h-[1.5px] transition-colors ${scrolled ? 'bg-black' : 'bg-white'}`}
+            />
+          ))}
+        </button>
+      </div>
+
+      {/* Mobile menu — right-aligned panel */}
+      {menuOpen && (
+        <div
+          className="fixed inset-0 z-50 lg:hidden flex touch-none"
+          onTouchMove={(e) => e.preventDefault()}
+        >
+          {/* Left blank area — tap or swipe to close */}
+          <div
+            className="flex-shrink-0 w-[30%]"
+            onClick={() => setMenuOpen(false)}
+            onTouchStart={() => setMenuOpen(false)}
+          />
+          {/* Right panel */}
+          <div className="flex-1 bg-white/30 backdrop-blur-xl flex flex-col justify-center items-center relative overflow-hidden -mt-20">
+            {/* Close button */}
+            <button
+              className="absolute top-5 right-6 p-2"
+              onClick={() => setMenuOpen(false)}
+              aria-label="Close menu"
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="1.5" strokeLinecap="round">
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            </button>
+
+            <nav className="flex flex-col items-center w-full px-8">
+              {navItems.map((item, i) => (
+                <div key={item.href} className="w-full flex flex-col items-center">
+                  {i > 0 && <div className="w-12 h-px bg-black/10" />}
+                  <Link
+                    href={item.href}
+                    className="font-playfair text-[28px] font-bold tracking-[.02em] text-black/80 hover:text-black transition-colors py-3"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                </div>
+              ))}
+            </nav>
           </div>
         </div>
       )}

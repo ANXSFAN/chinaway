@@ -174,9 +174,10 @@ export function CustomTravelClient({ provinces }: { provinces: Province[] }) {
               <h2 className="font-playfair text-2xl font-bold mb-6">{labels.step1[locale]}</h2>
 
               {/* Interactive map */}
-              <div className="w-full h-[400px] mb-6 rounded-sm overflow-hidden border border-[#e0e0e0]">
+              <div className="w-full h-[300px] sm:h-[400px] mb-6 rounded-sm overflow-hidden border border-[#e0e0e0]">
                 <ChinaMap
                   locale={locale}
+                  selectedProvinces={selectedProvinces}
                   onProvinceClick={mapClickRef}
                 />
               </div>

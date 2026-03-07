@@ -74,10 +74,16 @@ function FitBounds({ data }: { data: FeatureCollection }) {
     const bounds = L.geoJSON(data).getBounds()
     const fit = () => {
       map.invalidateSize()
+      const container = map.getContainer()
+      const width = container.clientWidth
       map.setMinZoom(1) // temporarily unlock
-      map.fitBounds(bounds, { padding: [0, 0] })
+      // On small screens use padding so the full map is visible
+      const isSmall = width < 768
+      const padding: [number, number] = isSmall ? [10, 10] : [0, 0]
+      map.fitBounds(bounds, { padding })
       const fitZoom = map.getZoom()
-      const targetZoom = fitZoom + 0.14
+      // Only add extra zoom on larger screens where it looks better
+      const targetZoom = isSmall ? fitZoom : fitZoom + 0.14
       map.setView(map.getCenter(), targetZoom, { animate: false })
       map.setMinZoom(targetZoom)
     }
@@ -116,28 +122,49 @@ function MapClickHandler({ onMapClick }: { onMapClick: () => void }) {
 type ChinaMapProps = {
   locale: Locale
   featuredProvinces?: string[]
+  /** Provinces to render with activeStyle (multi-select, e.g. custom travel page) */
+  selectedProvinces?: string[]
   onProvinceClick?: (provinceId: string, provinceName: string) => void
   onProvinceHover?: (provinceId: string | null, provinceName: string) => void
   onDeselect?: () => void
 }
 
-function ChinaMap({ locale, featuredProvinces: featuredList, onProvinceClick, onProvinceHover, onDeselect }: ChinaMapProps) {
+function ChinaMap({ locale, featuredProvinces: featuredList, selectedProvinces: selectedList, onProvinceClick, onProvinceHover, onDeselect }: ChinaMapProps) {
   const [geojson, setGeojson] = useState<FeatureCollection | null>(null)
   const geoJsonRef = useRef<L.GeoJSON | null>(null)
   const activeLayerRef = useRef<L.Path | null>(null)
   const activeIdRef = useRef<string | null>(null)
 
   const featured = useMemo(() => new Set(featuredList ?? []), [featuredList])
+  const selected = useMemo(() => new Set(selectedList ?? []), [selectedList])
   const geoJsonStyleFn = useMemo(() => makeGeoJsonStyleFn(featured), [featured])
 
-  // Store callbacks in refs so GeoJSON event handlers always use the latest
-  // without needing to re-bind
+  // Sync multi-select highlight with selectedProvinces prop
+  useEffect(() => {
+    if (!geoJsonRef.current) return
+    geoJsonRef.current.eachLayer((layer) => {
+      const feature = (layer as L.GeoJSON & { feature?: Feature }).feature
+      const id = (feature?.properties as ProvinceProperties)?.id
+      if (!id) return
+      const pathLayer = layer as L.Path
+      if (selected.has(id)) {
+        pathLayer.setStyle(activeStyle)
+      } else if (activeIdRef.current !== id) {
+        pathLayer.setStyle(getDefaultStyle(id, featured))
+      }
+    })
+  }, [selected, featured])
+
+  // Store callbacks and selected set in refs so GeoJSON event handlers always
+  // use the latest without needing to re-bind
   const onClickRef = useRef(onProvinceClick)
   const onHoverRef = useRef(onProvinceHover)
   const onDeselectRef = useRef(onDeselect)
+  const selectedRef = useRef(selected)
   useEffect(() => { onClickRef.current = onProvinceClick }, [onProvinceClick])
   useEffect(() => { onHoverRef.current = onProvinceHover }, [onProvinceHover])
   useEffect(() => { onDeselectRef.current = onDeselect }, [onDeselect])
+  useEffect(() => { selectedRef.current = selected }, [selected])
 
   useEffect(() => {
     fetch('/geojson/china-provinces.json')
@@ -148,7 +175,12 @@ function ChinaMap({ locale, featuredProvinces: featuredList, onProvinceClick, on
 
   const resetSelection = useCallback(() => {
     if (activeLayerRef.current && activeIdRef.current) {
-      activeLayerRef.current.setStyle(getDefaultStyle(activeIdRef.current, featured))
+      // Keep activeStyle if province is in multi-select set
+      if (selectedRef.current.has(activeIdRef.current)) {
+        activeLayerRef.current.setStyle(activeStyle)
+      } else {
+        activeLayerRef.current.setStyle(getDefaultStyle(activeIdRef.current, featured))
+      }
     }
     activeLayerRef.current = null
     activeIdRef.current = null
@@ -180,7 +212,12 @@ function ChinaMap({ locale, featuredProvinces: featuredList, onProvinceClick, on
         },
         mouseout: () => {
           if (activeIdRef.current !== props.id) {
-            pathLayer.setStyle(getDefaultStyle(props.id, featured))
+            // Keep activeStyle if province is in multi-select set
+            if (selectedRef.current.has(props.id)) {
+              pathLayer.setStyle(activeStyle)
+            } else {
+              pathLayer.setStyle(getDefaultStyle(props.id, featured))
+            }
           }
           if (activeLayerRef.current) {
             activeLayerRef.current.bringToFront()
@@ -196,7 +233,12 @@ function ChinaMap({ locale, featuredProvinces: featuredList, onProvinceClick, on
           }
 
           if (activeLayerRef.current && activeIdRef.current) {
-            activeLayerRef.current.setStyle(getDefaultStyle(activeIdRef.current, featured))
+            // Keep activeStyle if previous province is in multi-select set
+            if (selectedRef.current.has(activeIdRef.current)) {
+              activeLayerRef.current.setStyle(activeStyle)
+            } else {
+              activeLayerRef.current.setStyle(getDefaultStyle(activeIdRef.current, featured))
+            }
           }
           pathLayer.setStyle(activeStyle)
           pathLayer.bringToFront()
